@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Session;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -21,11 +22,94 @@ class AuthController extends Controller
 
     public function authenticate(?array $data): void
     {
-        var_dump($data);
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+            flash("error", "Token de segurança inválido.");
+            redirect("/entrar");
+        }
+
+        if (empty($data["email"]) || empty($data["password"])) {
+            flash("error", "Informe email e senha.");
+            redirect("/entrar");
+        }
+
+        $user = User::findByEmail($data["email"]);
+
+        if (!$user || !$user->verifyPassword($data["password"])) {
+            flash("error", "Email ou senha inválidos.");
+            redirect("/entrar");
+        }
+
+        $session = new Session();
+
+        $session->set("auth", [
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail(),
+            "role" => $user->getRole()
+        ]);
+
+        $session->regenerate();
+
+        flash("success", "Bem-vindo, {$user->getName()}!");
+
+        if ($user->getRole() === "tecnico") {
+            flash("success", "Bem-vindo, {$user->getName()}!");
+            redirect("/admin/dashboard");
+        }
+
+        if ($user->getRole() === "professor") {
+            flash("success", "Bem-vindo, Professor {$user->getName()}!");
+            redirect("/professor/dashboard");
+        }
+
+        redirect("/entrar");
+    }
+
+    public function logout(?array $data): void
+    {
+        $session = new Session();
+        $auth = $session->auth;
+
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+
+            flash("error", "Token de segurança inválido.");
+
+            if ($auth) {
+
+                if ($auth->role === "tecnico") {
+                    redirect("/admin/dashboard");
+                }
+
+                if ($auth->role === "professor") {
+                    redirect("/professor/dashboard");
+                }
+            }
+
+            redirect("/entrar");
+        }
+
+        $session->unset("auth");
+        $session->regenerate();
+
+        flash("success", "Sessão encerrada, mas volte logo!");
+
+        redirect("/entrar");
+    }
+
+    public function register()
+    {
+        echo $this->view->render('auth/register', [
+            "title" => "Registrar | " . APP_NAME
+        ]);
     }
 
     public function store(?array $data): void
     {
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+            flash("error", "Token de segurança inválido.");
+            redirect("/entrar");
+        }
+
         $required = [
             "name" => "O nome é obrigatório.",
             "email" => "O email é obrigatório.",
@@ -72,13 +156,6 @@ class AuthController extends Controller
 
         flash("success", "Conta criada com sucesso.");
         redirect("/entrar");
-    }
-
-    public function register()
-    {
-        echo $this->view->render('auth/register', [
-            "title" => "Registrar | " . APP_NAME
-        ]);
     }
 
     public function forgotPassword()

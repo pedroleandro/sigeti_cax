@@ -24,16 +24,16 @@
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" name="name"
                                        id="exampleInputFullName"
-                                       placeholder="Nome Completo">
+                                       placeholder="Nome Completo" required>
                             </div>
                             <div class="form-group">
                                 <input type="email" class="form-control form-control-user" name="email"
                                        id="exampleInputEmail"
-                                       placeholder="Email">
+                                       placeholder="Email" required>
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control form-control-user"
-                                       name="password" id="examplePassword" placeholder="Senha">
+                                       name="password" id="examplePassword" placeholder="Senha" required>
                             </div>
                             <button type="submit" class="btn btn-primary btn-user btn-block">Criar</button>
                         </form>

@@ -26,6 +26,9 @@
                                 <?= flash_message() ?>
 
                                 <form class="user" action="<?= url('/auth/send-link') ?>" method="post">
+
+                                    <?= csrf_input() ?>
+
                                     <div class="form-group">
                                         <input type="email" class="form-control form-control-user"
                                                name="email" id="exampleInputEmail" aria-describedby="emailHelp"
