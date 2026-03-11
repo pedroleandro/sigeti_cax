@@ -18,7 +18,10 @@
       "App\\": "app/"
     },
     "files": [
-      "config/app.php"
+      "config/app.php",
+      "app/Helpers/url.php",
+      "app/Helpers/csrf.php",
+      "app/Helpers/message.php"
     ]
   },
   "require": {
