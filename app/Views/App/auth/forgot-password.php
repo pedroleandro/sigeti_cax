@@ -17,26 +17,26 @@
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                                    <p class="mb-4">We get it, stuff happens. Just enter your email address below
-                                        and we'll send you a link to reset your password!</p>
+                                    <h1 class="h4 text-gray-900 mb-2">Esqueceu a senha?</h1>
+                                    <p class="mb-4">Entendemos, imprevistos acontecem. Basta inserir seu endereço de
+                                        e-mail abaixo
+                                        e enviaremos um link para redefinir sua senha.!</p>
                                 </div>
-                                <form class="user">
+                                <form class="user" action="<?= url('/auth/send-link') ?>" method="post">
                                     <div class="form-group">
                                         <input type="email" class="form-control form-control-user"
-                                               id="exampleInputEmail" aria-describedby="emailHelp"
-                                               placeholder="Enter Email Address...">
+                                               name="email" id="exampleInputEmail" aria-describedby="emailHelp"
+                                               placeholder="E-mail" required>
                                     </div>
-                                    <a href="login.html" class="btn btn-primary btn-user btn-block">
-                                        Reset Password
-                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">Recuperar Senha
+                                    </button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="register.html">Create an Account!</a>
+                                    <a class="small" href="<?= url('/registrar') ?>">Criar uma conta!</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="login.html">Already have an account? Login!</a>
+                                    <a class="small" href="<?= url('/entrar') ?>">Ja tem uma conta? Entrar!</a>
                                 </div>
                             </div>
                         </div>

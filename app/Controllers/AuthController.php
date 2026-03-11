@@ -18,6 +18,11 @@ class AuthController extends Controller
         ]);
     }
 
+    public function authenticate(?array $data): void
+    {
+        var_dump($data);
+    }
+
     public function register()
     {
         echo $this->view->render('auth/register', [
