@@ -27,6 +27,10 @@ $router->get('/', 'WebController@home');
 |--------------------------------------------------------------------------
 */
 
+$router->get('/entrar', 'AuthController@login');
+$router->get('/registrar', 'AuthController@register');
+$router->get('/esqueceu-a-senha', 'AuthController@forgotPassword');
+
 $router->get('/dashboard', 'AppController@dashboard');
 
 
