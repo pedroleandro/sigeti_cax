@@ -6,6 +6,7 @@ $dotenv = Dotenv::createImmutable(__DIR__ . "/../");
 $dotenv->load();
 
 define("APP_URL", $_ENV['APP_URL'] ?? "http://localhost/sigeti_cax");
+define("APP_NAME", $_ENV['APP_NAME'] ?? "SIGETI - Sistema de Gestão de Chamados de TI");
 
 define("DB_CONNECTION", $_ENV['DB_CONNECTION'] ?? "yourdbsql");
 define("DB_HOST", $_ENV['DB_HOST'] ?? "yourhost.com");

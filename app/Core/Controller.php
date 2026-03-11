@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Core;
+
+use League\Plates\Engine;
+
+class Controller
+{
+    protected ?Engine $view = null;
+
+    public function __construct(string $pathView = "Web")
+    {
+        $this->view = new Engine(__DIR__ . "/../Views/" . $pathView, "php");
+    }
+}
