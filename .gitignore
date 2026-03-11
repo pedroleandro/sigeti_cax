@@ -4,3 +4,6 @@ vendor/
 storage/
 .env
 composer.lock
+
+resources/themes/startbootstrap-creative-gh-pages/
+resources/themes/startbootstrap-sb-admin-2-gh-pages/
