@@ -1,0 +1,77 @@
+.flash {
+    position: relative;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+
+    border-radius: 6px;
+    border: 1px solid;
+
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+
+    display: flex;
+    align-items: center;
+
+    animation: flashFade .25s ease-in-out;
+}
+
+/* ERROR */
+
+.flash-error {
+    background: #fdecea;
+    border-color: #e74a3b;
+    color: #c0392b;
+}
+
+/* SUCCESS */
+
+.flash-success {
+    background: #e9f7ef;
+    border-color: #1cc88a;
+    color: #0f5132;
+}
+
+/* INFO */
+
+.flash-info {
+    background: #e8f7fa;
+    border-color: #36b9cc;
+    color: #055160;
+}
+
+/* WARNING */
+
+.flash-warning {
+    background: #fff8e5;
+    border-color: #f6c23e;
+    color: #7a5c00;
+}
+
+/* CLOSE */
+
+.flash-close {
+    position: absolute;
+    right: 14px;
+    top: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.flash-close:hover {
+    opacity: 1;
+}
+
+/* ANIMATION */
+
+@keyframes flashFade {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

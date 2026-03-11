@@ -11,6 +11,12 @@ function url(string $path = null): string
     return $base;
 }
 
+function redirect(string $path): void
+{
+    header("Location: " . url($path));
+    exit;
+}
+
 function assets(string $path = null): string
 {
     $base = APP_URL . "/public/assets";
@@ -31,10 +37,4 @@ function assets_sb_admin(string $path = null): string
     }
 
     return $base;
-}
-
-function redirect(string $path): void
-{
-    header("Location: " . url($path));
-    exit;
 }

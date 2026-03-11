@@ -20,6 +20,8 @@
                                     <h1 class="h4 text-gray-900 mb-4">Bem vindo de volta</h1>
                                 </div>
 
+                                <?= flash_message() ?>
+
                                 <form class="user" action="<?= url('/auth') ?>" method="post">
                                     <div class="form-group">
                                         <input type="email" class="form-control form-control-user"

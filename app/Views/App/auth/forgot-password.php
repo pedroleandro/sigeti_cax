@@ -22,6 +22,9 @@
                                         e-mail abaixo
                                         e enviaremos um link para redefinir sua senha.!</p>
                                 </div>
+
+                                <?= flash_message() ?>
+
                                 <form class="user" action="<?= url('/auth/send-link') ?>" method="post">
                                     <div class="form-group">
                                         <input type="email" class="form-control form-control-user"

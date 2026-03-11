@@ -14,20 +14,26 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Criar uma conta</h1>
                         </div>
+
+                        <?= flash_message() ?>
+
                         <form class="user" action="<?= url('/auth/store') ?>" method="post">
+
+                            <?= csrf_input() ?>
+
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" name="name"
                                        id="exampleInputFullName"
-                                       placeholder="Nome Completo" required>
+                                       placeholder="Nome Completo">
                             </div>
                             <div class="form-group">
                                 <input type="email" class="form-control form-control-user" name="email"
                                        id="exampleInputEmail"
-                                       placeholder="Email" required>
+                                       placeholder="Email">
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control form-control-user"
-                                       name="password" id="examplePassword" placeholder="Senha" required>
+                                       name="password" id="examplePassword" placeholder="Senha">
                             </div>
                             <button type="submit" class="btn btn-primary btn-user btn-block">Criar</button>
                         </form>

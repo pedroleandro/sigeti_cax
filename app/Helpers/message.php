@@ -13,7 +13,8 @@ function flash_message(): ?string
     if (!empty($_SESSION['_flash'])) {
         $flash = $_SESSION['_flash'];
         unset($_SESSION['_flash']);
-        return "<div class='alert {$flash['type']}'>{$flash['message']}</div>";
+
+        return "<div class='flash flash-{$flash['type']}'>{$flash['message']}</div>";
     }
 
     return null;
