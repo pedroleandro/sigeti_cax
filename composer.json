@@ -1,0 +1,27 @@
+{
+  "name": "pedroleandro/sigeti_cax",
+  "description": "Sistema de Gerenciamento de Chamados de TI",
+  "type": "project",
+  "licence": "proprietary",
+  "authors": [
+    {
+      "name": "Pedro Gomes",
+      "role": "Professor"
+    },
+    {
+      "name": "Pedro Leandro",
+      "role": "Desenvolvedor"
+    }
+  ],
+  "autoload": {
+    "psr-4" : {
+      "App\\": "app/"
+    }
+  },
+  "require": {
+    "php": "^8.2"
+  },
+  "files": {
+
+  }
+}
