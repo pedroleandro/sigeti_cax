@@ -283,6 +283,20 @@ abstract class AbstractModel
         return $this->attributes;
     }
 
+    public function count(): int
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+
+        if (!empty($this->wheres)) {
+            $sql .= " WHERE " . implode(' AND ', $this->wheres);
+        }
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute($this->params);
+
+        return (int) $statement->fetchColumn();
+    }
+
     protected static function hydrate(array $data): static
     {
         $instance = new static();

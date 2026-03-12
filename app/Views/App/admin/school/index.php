@@ -38,6 +38,10 @@
 
                     </tbody>
                 </table>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <?= $paginator->render() ?>
+                </div>
             </div>
         </div>
     </div>

@@ -20,6 +20,7 @@
     <!-- Custom styles for this template-->
     <link href="<?= assets_sb_admin('/css/sb-admin-2.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= assets('/css/message.css') ?>" type="text/css">
+    <link rel="stylesheet" href="<?= assets('/css/paginator.css') ?>" type="text/css">
 
 </head>
 

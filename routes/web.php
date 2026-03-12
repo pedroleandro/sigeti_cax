@@ -48,6 +48,7 @@ $router->post('/reset-password', 'AuthController@resetPassword');
 
 $router->group('/admin');
 $router->get('/dashboard', 'Admin\\DashboardController@dashboard');
+$router->get('/escolas/{page}', 'Admin\\SchoolController@index');
 $router->get('/escolas', 'Admin\\SchoolController@index');
 $router->get('/escolas/cadastrar', 'Admin\\SchoolController@create');
 $router->post('/escolas/store', 'Admin\\SchoolController@store');
