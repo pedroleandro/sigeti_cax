@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="<?= assets_sb_admin('/css/sb-admin-2.min.css') ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= assets('/css/message.css') ?>" type="text/css">
 
 </head>
 
@@ -99,6 +100,10 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
+
+                <div style="margin-top: 20px">
+                    <?= flash_message() ?>
+                </div>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">

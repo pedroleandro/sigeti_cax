@@ -39,11 +39,29 @@ $router->post('/send-link', 'AuthController@sendLink');
 $router->get('/recuperar/{code}', 'AuthController@recoverPassword');
 $router->post('/reset-password', 'AuthController@resetPassword');
 
+
+/*
+|--------------------------------------------------------------------------
+| Routes App Admin
+|--------------------------------------------------------------------------
+*/
+
 $router->group('/admin');
 $router->get('/dashboard', 'Admin\\DashboardController@dashboard');
+$router->get('/escolas', 'Admin\\SchoolController@index');
+$router->get('/escolas/cadastrar', 'Admin\\SchoolController@create');
+$router->post('/escolas/store', 'Admin\\SchoolController@store');
+
+
+/*
+|--------------------------------------------------------------------------
+| Routes App Professor
+|--------------------------------------------------------------------------
+*/
 
 $router->group('/professor');
 $router->get('/dashboard', 'Teacher\\DashboardController@dashboard');
+
 
 /*
 |--------------------------------------------------------------------------
