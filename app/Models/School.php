@@ -43,7 +43,17 @@ class School extends AbstractModel
 
     public function setAddress(string $address): void
     {
-        $this->attributes["address"] = trim($address);
+        $address = trim($address);
+
+        if (strlen($address) < 12) {
+            throw new InvalidArgumentException("O endereço da escola deve ter pelo menos 12 caracteres..");
+        }
+
+        if (empty($address)) {
+            throw new InvalidArgumentException("O endereço da escola é obrigatório.");
+        }
+
+        $this->attributes["address"] = $address;
     }
 
     public function getId(): ?int

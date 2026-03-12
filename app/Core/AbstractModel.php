@@ -40,14 +40,21 @@ abstract class AbstractModel
     public function fill(array $data): self
     {
         foreach ($this->fillable as $field) {
-            if (array_key_exists($field, $data)) {
-                $setter = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
-                if (method_exists($this, $setter)) {
-                    $this->$setter($data[$field]);
-                } else {
-                    $this->attributes[$field] = $data[$field];
-                }
+
+            if (!array_key_exists($field, $data)) {
+                continue;
             }
+
+            $value = $data[$field];
+
+            $setter = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+
+            if (method_exists($this, $setter)) {
+                $this->$setter($value);
+                continue;
+            }
+
+            $this->attributes[$field] = $value;
         }
 
         return $this;
@@ -312,5 +319,11 @@ abstract class AbstractModel
         $now = new DateTimeImmutable('now', $timezone);
 
         return $now->format('Y-m-d H:i:s');
+    }
+
+    public function setFillable(array $fillable): AbstractModel
+    {
+        $this->fillable = $fillable;
+        return $this;
     }
 }

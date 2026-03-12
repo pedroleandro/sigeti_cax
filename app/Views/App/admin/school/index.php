@@ -1,5 +1,5 @@
 <?php $this->layout('admin/app', [
-    'title' => $title,
+        'title' => $title,
 ]) ?>
 
 <!-- Begin Page Content -->
@@ -32,7 +32,18 @@
                             <td><?= $school->getCode() ?></td>
                             <td><?= $school->getName() ?></td>
                             <td><?= $school->getAddress() ?></td>
-                            <td>Editar | Deletar</td>
+                            <td>
+                                <a href="<?= url('/admin/escolas/editar/' . $school->getId()) ?>"
+                                   class="btn btn-sm btn-primary">
+                                    Editar
+                                </a>
+
+                                <a href="<?= url('/admin/escolas/deletar/' . $school->getId()) ?>"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Tem certeza que deseja deletar esta escola?')">
+                                    Deletar
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
 

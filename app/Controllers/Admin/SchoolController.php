@@ -57,4 +57,61 @@ class SchoolController extends Controller
     {
         var_dump($data);
     }
+
+    public function edit(?array $data): void
+    {
+        $id = $data['id'] ?? null;
+
+        if (!$id) {
+            redirect('/admin/escolas');
+            return;
+        }
+
+        $school = School::find($id);
+
+        if (!$school) {
+            flash('error', 'Escola não encontrada');
+            redirect('/admin/escolas');
+            return;
+        }
+
+        echo $this->view->render('/admin/school/edit', [
+            'title' => 'Editar Escola | ' . APP_NAME,
+            'school' => $school
+        ]);
+    }
+
+    public function update(?array $data): void
+    {
+        if (!$data || empty($data['id'])) {
+            redirect('/admin/escolas');
+            return;
+        }
+
+        $school = School::find((int)$data['id']);
+
+        if (!$school) {
+            flash('error', 'Escola não encontrada.');
+            redirect('/admin/escolas');
+            return;
+        }
+
+        try {
+
+            $school->fill($data);
+
+            if (!$school->save()) {
+                flash('error', 'Erro ao atualizar a escola.');
+                redirect('/admin/escolas/editar/' . $data['id']);
+                return;
+            }
+
+            flash('success', 'Escola atualizada com sucesso.');
+            redirect('/admin/escolas');
+
+        } catch (\InvalidArgumentException $exception) {
+            flash('error', $exception->getMessage());
+            redirect('/admin/escolas/editar/' . $data['id']);
+        }
+    }
 }
