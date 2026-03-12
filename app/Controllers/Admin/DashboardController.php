@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use App\Core\Auth;
 use App\Core\Controller;
 
 class DashboardController extends Controller
@@ -9,6 +10,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         parent::__construct("App");
+        Auth::requireRole("tecnico");
     }
 
     public function dashboard(): void
