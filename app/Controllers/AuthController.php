@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\User;
@@ -15,6 +16,17 @@ class AuthController extends Controller
 
     public function login()
     {
+        if (Auth::check()) {
+
+            if (Auth::role() === "tecnico") {
+                redirect("/admin/dashboard");
+            }
+
+            if (Auth::role() === "professor") {
+                redirect("/professor/dashboard");
+            }
+        }
+
         echo $this->view->render('auth/login', [
             "title" => "Entrar | " . APP_NAME
         ]);
