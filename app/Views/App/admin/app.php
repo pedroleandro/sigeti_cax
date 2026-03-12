@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="<?= assets_sb_admin('/css/sb-admin-2.min.css') ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= assets('/css/message.css') ?>" type="text/css">
 
 </head>
 
@@ -44,7 +45,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="<?= url('/professor/dashboard') ?>">
+            <a class="nav-link" href="<?= url('/admin/dashboard') ?>">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Área do Técnico</span></a>
         </li>
@@ -65,8 +66,8 @@
             </a>
             <div id="schools" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="">Novo</a>
-                    <a class="collapse-item" href="">Todos</a>
+                    <a class="collapse-item" href="<?= url('/admin/escolas/cadastrar') ?>">Cadastrar</a>
+                    <a class="collapse-item" href="<?= url('/admin/escolas') ?>">Todos</a>
                 </div>
             </div>
         </li>
@@ -141,6 +142,10 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
+
+                <div style="margin-top: 20px">
+                    <?= flash_message() ?>
+                </div>
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
