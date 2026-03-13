@@ -125,6 +125,11 @@ class User extends AbstractModel
         return $this->attributes["email"] ?? null;
     }
 
+    public function getDocument(): ?string
+    {
+        return $this->attributes["document"] ?? null;
+    }
+
     public function getRole(): ?string
     {
         return $this->attributes["role"] ?? null;
@@ -133,6 +138,11 @@ class User extends AbstractModel
     public function getStatus(): ?string
     {
         return $this->attributes["status"] ?? null;
+    }
+
+    public function getLastLogin()
+    {
+        return $this->attributes["last_login_at"] ?? null;
     }
 
     public function verifyPassword(string $password): bool
@@ -145,5 +155,14 @@ class User extends AbstractModel
         return (new static())
             ->where("email", "=", $email)
             ->first();
+    }
+
+    public function school(): ?School
+    {
+        if (!$this->getSchoolId()) {
+            return null;
+        }
+
+        return School::find($this->getSchoolId());
     }
 }

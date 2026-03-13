@@ -81,8 +81,11 @@
             </a>
             <div id="users" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="">Novo</a>
-                    <a class="collapse-item" href="">Todos</a>
+                    <a class="collapse-item" href="<?= url('/admin/usuarios/cadastrar') ?>">Novo</a>
+                    <a class="collapse-item" href="<?= url('/admin/usuarios') ?>">Todos</a>
+                    <a class="collapse-item" href="<?= url('/admin/usuarios/cadastros/solicitacoes') ?>">Solicitações</a>
+                    <a class="collapse-item" href="<?= url('/admin/usuarios/cadastros/tecnicos') ?>">Tecnicos</a>
+                    <a class="collapse-item" href="<?= url('/admin/usuarios/cadastros/professores') ?>">Professores</a>
                 </div>
             </div>
         </li>

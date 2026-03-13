@@ -48,12 +48,20 @@ $router->post('/reset-password', 'AuthController@resetPassword');
 
 $router->group('/admin');
 $router->get('/dashboard', 'Admin\\DashboardController@dashboard');
+
 $router->get('/escolas/{page}', 'Admin\\SchoolController@index');
 $router->get('/escolas', 'Admin\\SchoolController@index');
 $router->get('/escolas/cadastrar', 'Admin\\SchoolController@create');
 $router->post('/escolas/store', 'Admin\\SchoolController@store');
 $router->get('/escolas/editar/{id}', 'Admin\\SchoolController@edit');
 $router->post('/escolas/update', 'Admin\\SchoolController@update');
+
+$router->get('/usuarios/{page}', 'Admin\\UserController@index');
+$router->get('/usuarios', 'Admin\\UserController@index');
+$router->get('/usuarios/cadastrar', 'Admin\\UserController@create');
+$router->post('/usuarios/store', 'Admin\\UserController@store');
+$router->get('/usuarios/editar/{id}', 'Admin\\UserController@edit');
+$router->post('/usuarios/update', 'Admin\\UserController@update');
 
 
 /*
