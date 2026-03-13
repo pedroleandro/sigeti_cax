@@ -156,7 +156,7 @@ class AuthController extends Controller
                 "email" => $data["email"],
                 "password" => $data["password"],
                 "role" => "professor",
-                "status" => "ativo"
+                "status" => "inativo"
             ]);
 
             $user->save();
