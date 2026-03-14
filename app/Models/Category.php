@@ -40,6 +40,11 @@ class Category extends AbstractModel
         $this->attributes["description"] = $description;
     }
 
+    public function getId()
+    {
+        return $this->attributes["id"];
+    }
+
     public function getName(): string
     {
         return $this->attributes["name"];

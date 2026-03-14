@@ -63,6 +63,13 @@ $router->post('/usuarios/store', 'Admin\\UserController@store');
 $router->get('/usuarios/editar/{id}', 'Admin\\UserController@edit');
 $router->post('/usuarios/update', 'Admin\\UserController@update');
 
+$router->get('/categorias/{page}', 'Admin\\CategoryController@index');
+$router->get('/categorias', 'Admin\\CategoryController@index');
+$router->get('/categorias/cadastrar', 'Admin\\CategoryController@create');
+$router->post('/categorias/store', 'Admin\\CategoryController@store');
+$router->get('/categorias/editar/{id}', 'Admin\\CategoryController@edit');
+$router->post('/categorias/update', 'Admin\\CategoryController@update');
+
 
 /*
 |--------------------------------------------------------------------------

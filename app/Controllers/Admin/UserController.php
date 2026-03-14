@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use App\Core\Auth;
 use App\Core\Controller;
 use App\Models\School;
 use App\Models\User;
@@ -12,6 +13,8 @@ class UserController extends Controller
     public function __construct()
     {
         parent::__construct("App");
+
+        Auth::requireRole("tecnico");
     }
 
     public function index(?array $data): void
@@ -44,7 +47,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function create(): void
+    public function create(?array $data): void
     {
         $schools = School::all();
 
