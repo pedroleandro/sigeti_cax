@@ -70,6 +70,13 @@ $router->post('/categorias/store', 'Admin\\CategoryController@store');
 $router->get('/categorias/editar/{id}', 'Admin\\CategoryController@edit');
 $router->post('/categorias/update', 'Admin\\CategoryController@update');
 
+$router->get('/chamados/{page}', 'Admin\\TicketController@index');
+$router->get('/chamados', 'Admin\\TicketController@index');
+$router->get('/chamados/cadastrar', 'Admin\\TicketController@create');
+$router->post('/chamados/store', 'Admin\\TicketController@store');
+$router->get('/chamados/editar/{id}', 'Admin\\TicketController@edit');
+$router->post('/chamados/update', 'Admin\\TicketController@update');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -79,6 +86,8 @@ $router->post('/categorias/update', 'Admin\\CategoryController@update');
 
 $router->group('/professor');
 $router->get('/dashboard', 'Teacher\\DashboardController@dashboard');
+$router->get('/chamados/{page}', 'Teacher\\TicketController@index');
+$router->get('/chamados', 'Teacher\\TicketController@index');
 
 
 /*
