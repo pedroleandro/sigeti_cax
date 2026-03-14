@@ -14,6 +14,8 @@ abstract class AbstractModel
     protected string $primaryKey = 'id';
     protected array $fillable = [];
 
+    protected array $required = [];
+
     protected bool $timestamps = true;
 
     protected array $attributes = [];
@@ -58,6 +60,27 @@ abstract class AbstractModel
         }
 
         return $this;
+    }
+
+    public function setFillable(array $fillable): self
+    {
+        $this->fillable = $fillable;
+        return $this;
+    }
+
+    public function validate(array $data): array
+    {
+        $errors = [];
+
+        foreach ($this->required as $field => $message) {
+
+            if (!isset($data[$field]) || trim((string)$data[$field]) === '') {
+                $errors[] = $message;
+            }
+
+        }
+
+        return $errors;
     }
 
     public function save(): bool
@@ -319,11 +342,5 @@ abstract class AbstractModel
         $now = new DateTimeImmutable('now', $timezone);
 
         return $now->format('Y-m-d H:i:s');
-    }
-
-    public function setFillable(array $fillable): AbstractModel
-    {
-        $this->fillable = $fillable;
-        return $this;
     }
 }

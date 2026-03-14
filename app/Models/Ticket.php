@@ -16,12 +16,20 @@ class Ticket extends AbstractModel
         "description",
         "school_id",
         "category_id",
-        "opened_id",
+        "opened_by",
         "assigned_to",
         "status",
         "priority",
         "opened_at",
         "closed_at",
+    ];
+
+    protected array $required = [
+        "title" => "O título do chamado é obrigatório.",
+        "description" => "A descrição do chamado é obrigatória.",
+        "school_id" => "A escola é obrigatória.",
+        "category_id" => "A categoria é obrigatória.",
+        "opened_by" => "O professor é obrigatório"
     ];
 
     protected bool $timestamps = true;
