@@ -48,6 +48,7 @@ $router->post('/reset-password', 'AuthController@resetPassword');
 
 $router->group('/admin');
 $router->get('/dashboard', 'Admin\\DashboardController@dashboard');
+$router->get('/dashboard/{page}', 'Admin\\DashboardController@dashboard');
 
 $router->get('/escolas/{page}', 'Admin\\SchoolController@index');
 $router->get('/escolas', 'Admin\\SchoolController@index');
@@ -82,6 +83,9 @@ $router->post('/chamados/store', 'Admin\\TicketController@store');
 $router->get('/chamados/editar/{id}', 'Admin\\TicketController@edit');
 $router->post('/chamados/update', 'Admin\\TicketController@update');
 
+$router->get('/chamados/abertos', 'Admin\\TicketController@open');
+$router->get('/chamados/abertos/{page}', 'Admin\\TicketController@open');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +95,7 @@ $router->post('/chamados/update', 'Admin\\TicketController@update');
 
 $router->group('/professor');
 $router->get('/dashboard', 'Teacher\\DashboardController@dashboard');
+$router->get('/dashboard/{page}', 'Teacher\\DashboardController@dashboard');
 $router->get('/chamados/{page}', 'Teacher\\TicketController@index');
 $router->get('/chamados', 'Teacher\\TicketController@index');
 

@@ -70,10 +70,6 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="">Novo</a>
                     <a class="collapse-item" href="">Todos</a>
-                    <a class="collapse-item" href="">Abertos</a>
-                    <a class="collapse-item" href="">Em andamento</a>
-                    <a class="collapse-item" href="">Finalizados</a>
-                    <a class="collapse-item" href="">Arquivados</a>
                 </div>
             </div>
         </li>

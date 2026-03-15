@@ -178,16 +178,21 @@ class Ticket extends AbstractModel
     }
 
     public function openedBy(): ?User
-    {
-        return $this->getOpenedBy()
-            ? User::find($this->getOpenedBy())
-            : null;
-    }
+{
+    return $this->getOpenedBy()
+        ? User::find($this->getOpenedBy())
+        : null;
+}
 
     public function assignedTo(): ?User
     {
         return $this->getAssignedTo()
             ? User::find($this->getAssignedTo())
             : null;
+    }
+
+    public function getTicketsByStatus(string $status): array
+    {
+        return $this->where('status', "=", $status)->get();
     }
 }

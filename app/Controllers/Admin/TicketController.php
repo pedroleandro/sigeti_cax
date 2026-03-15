@@ -194,4 +194,34 @@ class TicketController extends Controller
         redirect("/admin/chamados/editar/" . $ticket->getId());
         return;
     }
+
+    public function open(?array $data): void
+    {
+        $page = $data["page"] ?? 1;
+
+        $limit = 10;
+
+        $ticketModel = new Ticket();
+
+        $totalTicketsOpen = $ticketModel->getTicketsByStatus("aberto");
+
+        $paginator = new Paginator(
+            url("/admin/chamados/abertos/"),
+            "Página"
+        );
+
+        $paginator->pager(count($totalTicketsOpen), $limit, $page);
+
+        $tickets = $ticketModel
+            ->orderBy("created_at", "DESC")
+            ->limit($paginator->limit())
+            ->offset($paginator->offset())
+            ->get();
+
+        echo $this->view->render('/admin/ticket/open', [
+            "title" => "Chamados Cadastrados | " . APP_NAME,
+            "tickets" => $tickets,
+            "paginator" => $paginator
+        ]);
+    }
 }

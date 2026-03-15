@@ -48,8 +48,13 @@ class AuthController extends Controller
 
         $user = User::findByEmail($data["email"]);
 
+        if(!$user){
+            flash("warning", "E-mail não cadastrado!");
+            redirect("/entrar");
+        }
+
         if ($user->getStatus() === "inativo") {
-            flash("warning", "Seu usuário está inativo! Contate o administrador.");
+            flash("warning", "Usuário inativo! Contate o administrador.");
             redirect("/entrar");
             return;
         }
@@ -78,7 +83,7 @@ class AuthController extends Controller
         }
 
         if ($user->getRole() === "professor") {
-            flash("success", "Bem-vindo, Professor {$user->getName()}!");
+            flash("success", "Bem-vindo, Professor(a) {$user->getName()}!");
             redirect("/professor/dashboard");
             return;
         }

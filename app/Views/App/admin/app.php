@@ -115,7 +115,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href="<?= url('/admin/chamados/cadastrar') ?>">Novo</a>
                     <a class="collapse-item" href="<?= url('/admin/chamados') ?>">Todos</a>
-                    <a class="collapse-item" href="<?= url('/admin/chamados') ?>">Abertos</a>
+                    <a class="collapse-item" href="<?= url('/admin/chamados/abertos') ?>">Abertos</a>
                     <a class="collapse-item" href="<?= url('/admin/chamados') ?>">Em andamento</a>
                     <a class="collapse-item" href="<?= url('/admin/chamados') ?>">Finalizados</a>
                     <a class="collapse-item" href="<?= url('/admin/chamados') ?>">Arquivados</a>
