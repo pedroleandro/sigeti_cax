@@ -16,6 +16,11 @@ class Category extends AbstractModel
         "description"
     ];
 
+    protected array $required = [
+        "name" => "O nome é obrigatório",
+        "description" => "A descrição é obrigatória"
+    ];
+
     protected bool $timestamps = true;
 
     public function setName(string $name): void

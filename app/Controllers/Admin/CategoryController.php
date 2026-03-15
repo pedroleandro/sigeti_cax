@@ -21,7 +21,7 @@ class CategoryController extends Controller
     {
         $page = $data["page"] ?? 1;
 
-        $limit = 3;
+        $limit = 10;
 
         $categoryModel = new Category();
 
@@ -56,7 +56,42 @@ class CategoryController extends Controller
 
     public function store(?array $data): void
     {
-        var_dump($data);
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+            flash("error", "Token de segurança inválido.");
+            redirect("/admin/categorias/cadastrar");
+            return;
+        }
+
+        $category = new Category();
+
+        $data = filter_var_array($data, FILTER_SANITIZE_SPECIAL_CHARS);
+        $errors = $category->validate($data);
+
+        if ($errors) {
+            flash("error", implode("<br>", $errors));
+            redirect("/admin/categorias/cadastrar");
+            return;
+        }
+
+        try {
+
+            $category->fill([
+                "name" => $data["name"],
+                "description" => $data["description"]
+            ]);
+
+            $category->save();
+
+        } catch (\InvalidArgumentException $exception) {
+
+            flash("error", $exception->getMessage());
+            redirect("/admin/categorias/cadastrar");
+            return;
+        }
+
+        flash("success", "Categoria cadastrada com sucesso.");
+        redirect("/admin/categorias/editar/" . $category->getId());
+        return;
     }
 
     public function edit(?array $data): void
@@ -86,11 +121,12 @@ class CategoryController extends Controller
     {
         if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
             flash("error", "Token de segurança inválido.");
-            redirect("/entrar");
+            redirect("/admin/categorias");
         }
 
-        if (!$data || empty($data['id'])) {
-            redirect('/admin/categorias');
+        if (empty($data["id"])) {
+            flash("error", "Categoria inválida.");
+            redirect("/admin/categorias");
             return;
         }
 
@@ -102,9 +138,20 @@ class CategoryController extends Controller
             return;
         }
 
+        $errors = $category->validate($data);
+
+        if ($errors) {
+            flash("error", implode("<br>", $errors));
+            redirect("/admin/categorias/editar/" . $category->getId());
+            return;
+        }
+
         try {
 
-            $category->fill($data);
+            $category->fill([
+                "name" => $data["name"],
+                "description" => $data["description"]
+            ]);
 
             if (!$category->save()) {
                 flash('error', 'Erro ao atualizar a categoria.');
@@ -113,7 +160,8 @@ class CategoryController extends Controller
             }
 
             flash('success', 'Categoria atualizada com sucesso.');
-            redirect('/admin/categorias');
+            redirect('/admin/categorias/editar/' . $data['id']);
+            return;
 
         } catch (\InvalidArgumentException $exception) {
             flash('error', $exception->getMessage());

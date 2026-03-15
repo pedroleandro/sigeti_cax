@@ -29,16 +29,16 @@
                             <?= csrf_input() ?>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="name" id="name"
+                                <input type="text" class="form-control" name="name" id="name"
                                        placeholder="Nome da Categoria" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="description" id="description"
-                                       placeholder="Descrição da Categoria" required>
+                                <input type="text" class="form-control" name="description" id="description"
+                                       placeholder="Descrição da Categoria">
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-user btn-block">Cadastrar</button>
+                            <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
                         </form>
 
                     </div>

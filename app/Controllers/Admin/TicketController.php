@@ -23,7 +23,7 @@ class TicketController extends Controller
     {
         $page = $data["page"] ?? 1;
 
-        $limit = 7;
+        $limit = 10;
 
         $ticketModel = new Ticket();
 

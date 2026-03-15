@@ -1,5 +1,5 @@
 <?php $this->layout('admin/app', [
-    'title' => $title,
+        'title' => $title,
 ]) ?>
 
 <!-- Begin Page Content -->
@@ -36,8 +36,10 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="description" id="description"
-                                       value="<?= $category->getDescription() ?>" placeholder="Descrição da Categoria" required>
+                                <input type="text" class="form-control form-control-user" name="description"
+                                       id="description"
+                                       value="<?= $category->getDescription() ?>" placeholder="Descrição da Categoria"
+                                       required>
                             </div>
 
                             <div class="d-flex">
