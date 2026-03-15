@@ -16,13 +16,7 @@
             <div class="row">
 
                 <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center"
-                     style="min-height: 500px;">
-
-                    <img src="<?= assets('/images/app/admin/ticket/chamado.png') ?>"
-                         alt="Imagem padrão"
-                         class="img-fluid"
-                         style="max-width: 350px;">
-
+                     style="min-height: 300px;">
                 </div>
 
                 <div class="col-lg-7">
