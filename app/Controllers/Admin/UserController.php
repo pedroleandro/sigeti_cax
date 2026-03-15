@@ -205,6 +205,11 @@ class UserController extends Controller
         return;
     }
 
+    public function delete(?array $data): void
+    {
+        var_dump($data);
+    }
+
     public function requests(?array $data): void
     {
         

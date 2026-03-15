@@ -62,6 +62,7 @@ $router->get('/usuarios/cadastrar', 'Admin\\UserController@create');
 $router->post('/usuarios/store', 'Admin\\UserController@store');
 $router->get('/usuarios/editar/{id}', 'Admin\\UserController@edit');
 $router->post('/usuarios/update', 'Admin\\UserController@update');
+$router->post('/usuarios/delete/{id}', 'Admin\\UserController@delete');
 
 $router->get('/usuarios/solicitacoes/{page}', 'Admin\\UserController@requests');
 $router->get('/usuarios/tecnicos/{page}', 'Admin\\UserController@technicians');
