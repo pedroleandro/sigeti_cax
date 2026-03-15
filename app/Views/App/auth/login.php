@@ -13,7 +13,15 @@
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center"
+                             style="min-height: 500px;">
+
+                            <img src=""
+                                 alt="Imagem padrão"
+                                 class="img-fluid"
+                                 style="max-width: 250px;">
+
+                        </div>
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">

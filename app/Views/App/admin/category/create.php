@@ -14,7 +14,17 @@
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-                <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+
+                <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center"
+                     style="min-height: 500px;">
+
+                    <img src="<?= assets('/images/app/admin/category/categoria.png') ?>"
+                         alt="Imagem padrão"
+                         class="img-fluid"
+                         style="max-width: 250px;">
+
+                </div>
+
                 <div class="col-lg-7">
                     <div class="p-5">
 

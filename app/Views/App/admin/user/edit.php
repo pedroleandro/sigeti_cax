@@ -12,7 +12,15 @@
         <div class="card-body p-0">
 
             <div class="row">
-                <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center"
+                     style="min-height: 500px;">
+
+                    <img src=""
+                         alt="Imagem padrão"
+                         class="img-fluid"
+                         style="max-width: 250px;">
+
+                </div>
 
                 <div class="col-lg-7">
                     <div class="p-5">
@@ -120,7 +128,7 @@
                             </div>
 
                             <div class="d-flex gap-2">
-                                <a href="<?= url('/admin/usuarios') ?>" class="btn btn-danger w-50">
+                                <a href="<?= url('/admin/usuarios') ?>" class="btn btn-danger w-50 mr-3">
                                     Voltar
                                 </a>
 
