@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="d-flex">
-                                <a href="<?= url('/admin/categorias') ?>" class="btn btn-danger btn-user w-50">
+                                <a href="<?= url('/admin/categorias') ?>" class="btn btn-danger w-50">
                                     Voltar
                                 </a>
                                 <button type="submit" class="btn btn-primary btn-user w-50">Atualizar</button>

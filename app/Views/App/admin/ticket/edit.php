@@ -134,7 +134,7 @@
 
                             <div class="d-flex">
 
-                                <a href="<?= url('/admin/chamados') ?>" class="btn btn-danger btn-user w-50">
+                                <a href="<?= url('/admin/chamados') ?>" class="btn btn-danger w-50">
                                     Voltar
                                 </a>
 
