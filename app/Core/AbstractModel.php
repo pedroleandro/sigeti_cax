@@ -74,10 +74,13 @@ abstract class AbstractModel
 
         foreach ($this->required as $field => $message) {
 
+            if ($field === "password" && !empty($data["id"]) && empty($data["password"])) {
+                continue;
+            }
+
             if (!isset($data[$field]) || trim((string)$data[$field]) === '') {
                 $errors[] = $message;
             }
-
         }
 
         return $errors;

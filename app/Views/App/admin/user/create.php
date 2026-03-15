@@ -29,8 +29,6 @@
                             <?= csrf_input() ?>
 
                             <div class="form-group">
-                                <label for="school">Escola: </label>
-
                                 <select name="school" id="school" class="custom-select">
                                     <option selected disabled>Selecione a Escola</option>
                                     <?php foreach ($schools as $school) : ?>
@@ -40,26 +38,26 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="role">Nome Completo: </label>
-                                <input type="text" class="form-control form-control-user" name="name" id="name"
+                                <input type="text" class="form-control" name="name" id="name"
                                        placeholder="Nome Completo" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="role">Email: </label>
-                                <input type="email" class="form-control form-control-user" name="email"
+                                <input type="email" class="form-control" name="email"
                                        id="exampleInputEmail"
                                        placeholder="Email" required>
                             </div>
                             <div class="form-group">
-                                <label for="role">Senha: </label>
-                                <input type="password" class="form-control form-control-user"
+                                <input type="password" class="form-control"
                                        name="password" id="examplePassword" placeholder="Senha" required>
                             </div>
 
                             <div class="form-group">
-                                <label for="role">Perfil: </label>
+                                <input type="text" class="form-control" name="document" id="document"
+                                       placeholder="Documento">
+                            </div>
 
+                            <div class="form-group">
                                 <select name="role" id="role" class="custom-select">
                                     <option selected disabled>Selecione o Perfil</option>
                                     <option value="professor">Professor</option>
@@ -68,10 +66,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="status">Status: </label>
-
                                 <select name="status" id="status" class="custom-select">
                                     <option selected disabled>Selecione o Status</option>
+                                    <option value="registrado">Registrado</option>
                                     <option value="ativo">Ativo</option>
                                     <option value="inativo">Inativo</option>
                                 </select>

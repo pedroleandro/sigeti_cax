@@ -63,6 +63,10 @@ $router->post('/usuarios/store', 'Admin\\UserController@store');
 $router->get('/usuarios/editar/{id}', 'Admin\\UserController@edit');
 $router->post('/usuarios/update', 'Admin\\UserController@update');
 
+$router->get('/usuarios/solicitacoes/{page}', 'Admin\\UserController@requests');
+$router->get('/usuarios/tecnicos/{page}', 'Admin\\UserController@technicians');
+$router->get('/usuarios/professores/{page}', 'Admin\\UserController@teachers');
+
 $router->get('/categorias/{page}', 'Admin\\CategoryController@index');
 $router->get('/categorias', 'Admin\\CategoryController@index');
 $router->get('/categorias/cadastrar', 'Admin\\CategoryController@create');

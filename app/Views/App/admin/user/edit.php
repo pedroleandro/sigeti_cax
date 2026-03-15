@@ -5,7 +5,7 @@
 <div class="container-fluid">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Editando Usuário <?= $user->getName() ?></h1>
+        <h1 class="h3 mb-0 text-gray-800">Editando Usuário: <strong>#<?= $user->getName() ?></strong></h1>
     </div>
 
     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -31,16 +31,18 @@
 
                             <!-- Escola -->
                             <div class="form-group">
-                                <label for="school">Escola</label>
+                                <select class="form-control" name="school_id">
 
-                                <select name="school_id" id="school" class="custom-select">
+                                    <option value="">Selecione a escola</option>
 
                                     <?php foreach ($schools as $school): ?>
+
                                         <option
                                                 value="<?= $school->getId() ?>"
-                                                <?= $user->getSchoolId() == $school->getId() ? 'selected' : '' ?>
-                                        >
+                                                <?= $user->getSchoolId() == $school->getId() ? 'selected' : '' ?>>
+
                                             <?= $school->getName() ?>
+
                                         </option>
 
                                     <?php endforeach; ?>
@@ -50,11 +52,9 @@
 
                             <!-- Nome -->
                             <div class="form-group">
-                                <label>Nome Completo</label>
-
                                 <input
                                         type="text"
-                                        class="form-control form-control-user"
+                                        class="form-control"
                                         name="name"
                                         value="<?= $user->getName() ?>"
                                         required
@@ -63,11 +63,10 @@
 
                             <!-- Email -->
                             <div class="form-group">
-                                <label>Email</label>
 
                                 <input
                                         type="email"
-                                        class="form-control form-control-user"
+                                        class="form-control"
                                         name="email"
                                         value="<?= $user->getEmail() ?>"
                                         required
@@ -76,11 +75,10 @@
 
                             <!-- Senha -->
                             <div class="form-group">
-                                <label>Senha</label>
 
                                 <input
                                         type="password"
-                                        class="form-control form-control-user"
+                                        class="form-control"
                                         name="password"
                                         placeholder="Digite apenas se quiser alterar"
                                 >
@@ -88,8 +86,6 @@
 
                             <!-- Perfil -->
                             <div class="form-group">
-                                <label>Perfil</label>
-
                                 <select name="role" class="custom-select">
 
                                     <option value="professor" <?= $user->getRole() == 'professor' ? 'selected' : '' ?>>
@@ -105,9 +101,12 @@
 
                             <!-- Status -->
                             <div class="form-group">
-                                <label>Status</label>
 
                                 <select name="status" class="custom-select">
+
+                                    <option value="registrado" <?= $user->getStatus() == 'registrado' ? 'selected' : '' ?>>
+                                        Registrado
+                                    </option>
 
                                     <option value="ativo" <?= $user->getStatus() == 'ativo' ? 'selected' : '' ?>>
                                         Ativo

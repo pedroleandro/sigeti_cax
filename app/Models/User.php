@@ -21,9 +21,15 @@ class User extends AbstractModel
         "status"
     ];
 
+    protected array $required = [
+        "name" => "O nome é obrigatório.",
+        "email" => "O email é obrigatório.",
+        "password" => "A senha é obrigatória."
+    ];
+
     protected bool $timestamps = true;
 
-    public function setSchoolId(?int $schoolId): void
+    public function setSchoolId(int $schoolId): void
     {
         $this->attributes["school_id"] = $schoolId;
     }
@@ -91,7 +97,7 @@ class User extends AbstractModel
     {
         $status = $status ?? "ativo";
 
-        $statuses = ["ativo", "inativo"];
+        $statuses = ["registrado", "ativo", "inativo"];
 
         if (!in_array($status, $statuses)) {
             throw new \InvalidArgumentException("Status inválido");
