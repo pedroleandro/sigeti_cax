@@ -17,6 +17,12 @@ class School extends AbstractModel
         "address"
     ];
 
+    protected array $required = [
+        "name" => "O nome é obrigatorio",
+        "code" => "O código é obrigatorio",
+        "address" => "O endereço é obrigatorio"
+    ];
+
     protected bool $timestamps = true;
 
     public function setName(string $name): void

@@ -34,7 +34,7 @@
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center"
-           href="<?= url('/professor/dashboard') ?>">
+           href="<?= url('/admin/dashboard') ?>">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -250,12 +250,12 @@
 <!-- Custom scripts for all pages-->
 <script src="<?= assets_sb_admin('/js/sb-admin-2.min.js') ?>"></script>
 
-<!-- Page level plugins -->
-<script src="<?= assets_sb_admin('/vendor/chart.js/Chart.min.js') ?>"></script>
-
-<!-- Page level custom scripts -->
-<script src="<?= assets_sb_admin('/js/demo/chart-area-demo.js') ?>"></script>
-<script src="<?= assets_sb_admin('/js/demo/chart-pie-demo.js') ?>"></script>
+<!--<!-- Page level plugins -->-->
+<!--<script src="--><?php //= assets_sb_admin('/vendor/chart.js/Chart.min.js') ?><!--"></script>-->
+<!---->
+<!--<!-- Page level custom scripts -->-->
+<!--<script src="--><?php //= assets_sb_admin('/js/demo/chart-area-demo.js') ?><!--"></script>-->
+<!--<script src="--><?php //= assets_sb_admin('/js/demo/chart-pie-demo.js') ?><!--"></script>-->
 
 </body>
 

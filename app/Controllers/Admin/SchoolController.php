@@ -20,7 +20,7 @@ class SchoolController extends Controller
     {
         $page = $data["page"] ?? 1;
 
-        $limit = 3;
+        $limit = 10;
 
         $schoolModel = new School();
 
@@ -55,7 +55,43 @@ class SchoolController extends Controller
 
     public function store(?array $data): void
     {
-        var_dump($data);
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+            flash("error", "Token de segurança inválido.");
+            redirect("/admin/escolas/cadastrar");
+            return;
+        }
+
+        $school = new School();
+
+        $data = filter_var_array($data, FILTER_SANITIZE_SPECIAL_CHARS);
+        $errors = $school->validate($data);
+
+        if ($errors) {
+            flash("error", implode("<br>", $errors));
+            redirect("/admin/escolas/cadastrar");
+            return;
+        }
+
+        try {
+
+            $school->fill([
+                "name" => $data["name"],
+                "code" => $data["code"],
+                "address" => $data["address"]
+            ]);
+
+            $school->save();
+
+        } catch (\InvalidArgumentException $exception) {
+
+            flash("error", $exception->getMessage());
+            redirect("/admin/escolas/cadastrar");
+            return;
+        }
+
+        flash("success", "Escola cadastrada com sucesso.");
+        redirect("/admin/escolas/editar/" . $school->getId());
+        return;
     }
 
     public function edit(?array $data): void
@@ -83,35 +119,53 @@ class SchoolController extends Controller
 
     public function update(?array $data): void
     {
-        if (!$data || empty($data['id'])) {
-            redirect('/admin/escolas');
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+            flash("error", "Token de segurança inválido.");
+            redirect("/admin/escolas");
             return;
         }
 
-        $school = School::find((int)$data['id']);
+        if (empty($data["id"])) {
+            flash("error", "Escola inválida.");
+            redirect("/admin/escolas");
+            return;
+        }
+
+        $school = School::find($data["id"]);
 
         if (!$school) {
-            flash('error', 'Escola não encontrada.');
-            redirect('/admin/escolas');
+            flash("error", "Escola não encontrada.");
+            redirect("/admin/escolas");
+            return;
+        }
+
+        $errors = $school->validate($data);
+
+        if ($errors) {
+            flash("error", implode("<br>", $errors));
+            redirect("/admin/escolas/editar/" . $school->getId());
             return;
         }
 
         try {
 
-            $school->fill($data);
+            $school->fill([
+                "name" => $data["name"],
+                "code" => $data["code"],
+                "address" => $data["address"]
+            ]);
 
-            if (!$school->save()) {
-                flash('error', 'Erro ao atualizar a escola.');
-                redirect('/admin/escolas/editar/' . $data['id']);
-                return;
-            }
-
-            flash('success', 'Escola atualizada com sucesso.');
-            redirect('/admin/escolas');
+            $school->save();
 
         } catch (\InvalidArgumentException $exception) {
-            flash('error', $exception->getMessage());
-            redirect('/admin/escolas/editar/' . $data['id']);
+
+            flash("error", $exception->getMessage());
+            redirect("/admin/escolas/editar/" . $data["id"]);
+            return;
         }
+
+        flash("success", "Escola atualizada com sucesso.");
+        redirect("/admin/escolas/editar/" . $school->getId());
+        return;
     }
 }

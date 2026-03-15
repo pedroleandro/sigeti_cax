@@ -7,7 +7,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Editando Escola <?= $school->getName() ?></h1>
+        <h1 class="h3 mb-0 text-gray-800">Editando Escola: <strong>#<?= $school->getName() ?></strong></h1>
     </div>
 
     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -19,7 +19,7 @@
                     <div class="p-5">
 
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">Editar Escola: </h1>
+                            <h1 class="h4 text-gray-900 mb-4">Editar Escola </h1>
                         </div>
 
                         <?= flash_message() ?>
@@ -31,18 +31,18 @@
                             <input type="hidden" name="id" value="<?= $school->getId() ?>">
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="name" id="name"
+                                <input type="text" class="form-control" name="name" id="name"
                                        value="<?= $school->getName() ?>" placeholder="Nome Completo da Escola" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="code" id="code"
-                                       value="<?= $school->getCode() ?>" placeholder="Código da Escola" required>
+                                <input type="text" class="form-control" name="code" id="code"
+                                       value="<?= $school->getCode() ?>" placeholder="Código INEP da Escola" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="address" id="address"
-                                       value="<?= $school->getAddress() ?>" placeholder="Endereço da Escola">
+                                <input type="text" class="form-control" name="address" id="address"
+                                       value="<?= $school->getAddress() ?>" placeholder="Endereço Completo da Escola">
                             </div>
 
                             <div class="d-flex">

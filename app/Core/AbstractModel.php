@@ -68,7 +68,7 @@ abstract class AbstractModel
         return $this;
     }
 
-    public function validate(array $data): array
+    public function validate(?array $data): array
     {
         $errors = [];
 

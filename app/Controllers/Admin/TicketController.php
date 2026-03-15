@@ -68,6 +68,7 @@ class TicketController extends Controller
         if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
             flash("error", "Token de segurança inválido.");
             redirect("/admin/chamados/cadastrar");
+            return;
         }
 
         $ticket = new Ticket();
@@ -77,6 +78,7 @@ class TicketController extends Controller
         if ($errors) {
             flash("error", implode("<br>", $errors));
             redirect("/admin/chamados/cadastrar");
+            return;
         }
 
         try {
@@ -100,10 +102,12 @@ class TicketController extends Controller
 
             flash("error", $exception->getMessage());
             redirect("/admin/chamados/cadastrar");
+            return;
         }
 
         flash("success", "Chamado criado com sucesso.");
         redirect("/admin/chamados/editar/" . $ticket->getId());
+        return;
     }
 
     public function edit(?array $data): void
@@ -141,11 +145,13 @@ class TicketController extends Controller
         if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
             flash("error", "Token de segurança inválido.");
             redirect("/admin/chamados");
+            return;
         }
 
         if (empty($data["id"])) {
             flash("error", "Chamado inválido.");
             redirect("/admin/chamados");
+            return;
         }
 
         $ticket = Ticket::find($data["id"]);
@@ -153,6 +159,7 @@ class TicketController extends Controller
         if (!$ticket) {
             flash("error", "Chamado não encontrado.");
             redirect("/admin/chamados");
+            return;
         }
 
         $errors = $ticket->validate($data);
@@ -160,6 +167,7 @@ class TicketController extends Controller
         if ($errors) {
             flash("error", implode("<br>", $errors));
             redirect("/admin/chamados/editar/" . $ticket->getId());
+            return;
         }
 
         try {
@@ -179,9 +187,11 @@ class TicketController extends Controller
 
             flash("error", $exception->getMessage());
             redirect("/admin/chamados/editar/" . $data["id"]);
+            return;
         }
 
         flash("success", "Chamado atualizado com sucesso.");
         redirect("/admin/chamados/editar/" . $ticket->getId());
+        return;
     }
 }

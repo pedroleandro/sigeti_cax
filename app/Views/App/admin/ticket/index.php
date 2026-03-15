@@ -7,7 +7,7 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Chamados Cadastrados</h1>
 
-        <a href="<?= url('/admin/chamados/novo') ?>" class="btn btn-primary btn-sm">
+        <a href="<?= url('/admin/chamados/cadastrar') ?>" class="btn btn-primary btn-sm">
             Novo Chamado
         </a>
     </div>

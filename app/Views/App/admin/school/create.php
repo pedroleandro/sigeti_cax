@@ -29,17 +29,17 @@
                             <?= csrf_input() ?>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="name" id="name"
+                                <input type="text" class="form-control" name="name" id="name"
                                        placeholder="Nome Completo da Escola" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="code" id="code"
+                                <input type="text" class="form-control" name="code" id="code"
                                        placeholder="Código da Escola" required>
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control form-control-user" name="address" id="address"
+                                <input type="text" class="form-control" name="address" id="address"
                                        placeholder="Endereço da Escola" required>
                             </div>
 
