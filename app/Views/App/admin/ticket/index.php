@@ -58,9 +58,8 @@
 
                                     $badge = match ($priority) {
                                         'baixa' => 'badge-secondary',
-                                        'critica' => 'badge-danger',
-                                        'alta' => 'badge-warning',
-                                        'media' => 'badge-info'
+                                        'media' => 'badge-info',
+                                        'alta' => 'badge-danger'
                                     };
                                     ?>
 
@@ -77,7 +76,10 @@
                                     $badge = match ($status) {
                                         'aberto' => 'badge-warning',
                                         'em_andamento' => 'badge-primary',
+                                        'aguardando' => 'badge-info',
                                         'resolvido' => 'badge-success',
+                                        'fechado' => 'badge-dark',
+                                        'arquivado' => 'badge-secondary',
                                         default => 'badge-secondary'
                                     };
                                     ?>

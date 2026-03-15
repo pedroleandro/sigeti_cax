@@ -78,7 +78,7 @@ class Ticket extends AbstractModel
 
     public function setStatus(string $status): void
     {
-        $statuses = ["aberto", "em_andamento", "resolvido"];
+        $statuses = ['aberto', 'em_andamento', 'aguardando', 'resolvido', 'fechado', 'arquivado'];
 
         if (!in_array($status, $statuses)) {
             throw new InvalidArgumentException("Status inválido.");
@@ -89,7 +89,7 @@ class Ticket extends AbstractModel
 
     public function setPriority(string $priority): void
     {
-        $priorities = ["critica", "alta", "media", "baixa"];
+        $priorities = ["alta", "media", "baixa"];
 
         if (!in_array($priority, $priorities)) {
             throw new InvalidArgumentException("Prioridade inválida.");
