@@ -24,7 +24,8 @@
 
             <div class="table-responsive">
 
-                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover table-responsive-sm table-responsive-md table-responsive-lg"
+                       id="dataTable">
 
                     <thead>
                     <tr>
@@ -53,18 +54,18 @@
 
                                 <td>
                                     <?php
-                                        $priority = $ticket->getPriority();
+                                    $priority = $ticket->getPriority();
 
-                                        $badge = match($priority) {
-                                            'baixa' => 'badge-secondary',
-                                            'critica' => 'badge-danger',
-                                            'alta' => 'badge-warning',
-                                            'media' => 'badge-info'
-                                        };
+                                    $badge = match ($priority) {
+                                        'baixa' => 'badge-secondary',
+                                        'critica' => 'badge-danger',
+                                        'alta' => 'badge-warning',
+                                        'media' => 'badge-info'
+                                    };
                                     ?>
 
                                     <span class="badge <?= $badge ?>">
-                                        <?= str_replace("_"," ", ucfirst($priority)) ?>
+                                        <?= str_replace("_", " ", ucfirst($priority)) ?>
                                     </span>
                                 </td>
 
@@ -73,7 +74,7 @@
                                     <?php
                                     $status = $ticket->getStatus();
 
-                                    $badge = match($status) {
+                                    $badge = match ($status) {
                                         'aberto' => 'badge-warning',
                                         'em_andamento' => 'badge-primary',
                                         'resolvido' => 'badge-success',
@@ -82,7 +83,7 @@
                                     ?>
 
                                     <span class="badge <?= $badge ?>">
-                                        <?= str_replace("_"," ", ucfirst($status)) ?>
+                                        <?= str_replace("_", " ", ucfirst($status)) ?>
                                     </span>
 
                                 </td>

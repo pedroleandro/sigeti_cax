@@ -138,7 +138,7 @@
                                     Voltar
                                 </a>
 
-                                <button type="submit" class="btn btn-primary btn-user w-50">
+                                <button type="submit" class="btn btn-primary w-50">
                                     Atualizar
                                 </button>
 
