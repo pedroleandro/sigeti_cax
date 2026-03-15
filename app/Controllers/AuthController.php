@@ -37,18 +37,27 @@ class AuthController extends Controller
         if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
             flash("error", "Token de segurança inválido.");
             redirect("/entrar");
+            return;
         }
 
         if (empty($data["email"]) || empty($data["password"])) {
             flash("error", "Informe email e senha.");
             redirect("/entrar");
+            return;
         }
 
         $user = User::findByEmail($data["email"]);
 
+        if ($user->getStatus() === "inativo") {
+            flash("warning", "Seu usuário está inativo! Contate o administrador.");
+            redirect("/entrar");
+            return;
+        }
+
         if (!$user || !$user->verifyPassword($data["password"])) {
             flash("error", "Email ou senha inválidos.");
             redirect("/entrar");
+            return;
         }
 
         $session = new Session();
@@ -62,19 +71,20 @@ class AuthController extends Controller
 
         $session->regenerate();
 
-        flash("success", "Bem-vindo, {$user->getName()}!");
-
         if ($user->getRole() === "tecnico") {
             flash("success", "Bem-vindo, {$user->getName()}!");
             redirect("/admin/dashboard");
+            return;
         }
 
         if ($user->getRole() === "professor") {
             flash("success", "Bem-vindo, Professor {$user->getName()}!");
             redirect("/professor/dashboard");
+            return;
         }
 
         redirect("/entrar");
+        return;
     }
 
     public function logout(?array $data): void
