@@ -134,7 +134,7 @@
                                 <td><?= $ticket->getTitle() ?></td>
                                 <td><?= $ticket->school()->getName() ?></td>
                                 <td><?= $ticket->openedBy()->getName() ?></td>
-                                <td><?= $ticket->assignedTo()->getName() ?></td>
+                                <td><?= $ticket->getAssignedTo() === null ? "" : $ticket->assignedTo()->getName() ?></td>
 
                                 <td>
                                     <?php

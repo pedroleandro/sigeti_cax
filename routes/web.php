@@ -94,10 +94,12 @@ $router->get('/chamados/abertos/{page}', 'Admin\\TicketController@open');
 */
 
 $router->group('/professor');
-$router->get('/dashboard', 'Teacher\\DashboardController@dashboard');
 $router->get('/dashboard/{page}', 'Teacher\\DashboardController@dashboard');
+$router->get('/dashboard', 'Teacher\\DashboardController@dashboard');
 $router->get('/chamados/{page}', 'Teacher\\TicketController@index');
 $router->get('/chamados', 'Teacher\\TicketController@index');
+$router->get('/chamados/cadastrar', 'Teacher\\TicketController@create');
+$router->post('/chamados/store', 'Teacher\\TicketController@store');
 
 
 /*
