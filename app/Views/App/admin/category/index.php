@@ -6,7 +6,7 @@
 <div class="container-fluid">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Escolas Cadastradas</h1>
+        <h1 class="h3 mb-0 text-gray-800">Categorias Cadastradas</h1>
 
         <a href="<?= url('/admin/categorias/cadastrar') ?>" class="btn btn-primary btn-sm">
             Nova Categoria
