@@ -89,12 +89,9 @@
 
                             <div class="form-group">
                                 <select class="form-control" name="priority" required>
-
                                     <option value="baixa">Baixa</option>
                                     <option value="media" selected>Média</option>
                                     <option value="alta">Alta</option>
-                                    <option value="critica">Crítica</option>
-
                                 </select>
                             </div>
 

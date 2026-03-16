@@ -51,11 +51,14 @@ class TicketController extends Controller
 
     public function create(?array $data): void
     {
+        $user = User::find(Auth::user()->id);
+        $userSchools = $user->schools();
         $categories = Category::all();
 
         echo $this->view->render('/teacher/ticket/create', [
             "title" => "Abrir Novo Chamado | " . APP_NAME,
-            "categories" => $categories
+            "categories" => $categories,
+            "userSchools" => $userSchools
         ]);
     }
 
@@ -68,11 +71,40 @@ class TicketController extends Controller
         }
 
         $user = User::find(Auth::user()->id);
-        $data['school_id'] = $user->school()->getId();
-        $data['opened_by'] = $user->getId();
+        $userSchools = $user->schools();
+
+        if (empty($userSchools)) {
+            flash("error", "Você não está vinculado a nenhuma escola.");
+            redirect("/professor/chamados/cadastrar");
+            return;
+        }
+
+        // se o professor tiver mais de uma escola, ele precisa ter escolhido no formulário
+        if (count($userSchools) > 1) {
+            if (empty($data["school_id"])) {
+                flash("error", "Selecione a escola para a qual deseja abrir o chamado.");
+                redirect("/professor/chamados/cadastrar");
+                return;
+            }
+
+            // garante que a escola escolhida realmente pertence ao professor
+            $validSchoolIds = array_map(fn($link) => $link->getSchoolId(), $userSchools);
+            if (!in_array((int)$data["school_id"], $validSchoolIds)) {
+                flash("error", "Escola inválida.");
+                redirect("/professor/chamados/cadastrar");
+                return;
+            }
+
+            $schoolId = (int)$data["school_id"];
+        } else {
+            // professor com vínculo único — pega direto sem precisar escolher
+            $schoolId = $userSchools[0]->getSchoolId();
+        }
+
+        $data["school_id"] = $schoolId;
+        $data["opened_by"] = $user->getId();
 
         $ticket = new Ticket();
-
         $errors = $ticket->validate($data);
 
         if ($errors) {
@@ -90,18 +122,14 @@ class TicketController extends Controller
                 "opened_by" => $data["opened_by"],
                 "status" => "aberto"
             ]);
-
             $ticket->save();
-
-        } catch (\InvalidArgumentException $exception) {
-
-            flash("error", $exception->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            flash("error", $e->getMessage());
             redirect("/professor/chamados/cadastrar");
             return;
         }
 
         flash("success", "Chamado aberto com sucesso.");
         redirect("/professor/chamados");
-        return;
     }
 }

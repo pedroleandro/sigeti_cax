@@ -78,12 +78,10 @@ class Ticket extends AbstractModel
 
     public function setStatus(string $status): void
     {
-        $statuses = ['aberto', 'em_andamento', 'aguardando', 'resolvido', 'fechado', 'arquivado'];
-
+        $statuses = ['aberto', 'em_andamento', 'aguardando', 'resolvido', 'finalizado', 'arquivado'];
         if (!in_array($status, $statuses)) {
             throw new InvalidArgumentException("Status inválido.");
         }
-
         $this->attributes["status"] = $status;
     }
 
@@ -178,11 +176,11 @@ class Ticket extends AbstractModel
     }
 
     public function openedBy(): ?User
-{
-    return $this->getOpenedBy()
-        ? User::find($this->getOpenedBy())
-        : null;
-}
+    {
+        return $this->getOpenedBy()
+            ? User::find($this->getOpenedBy())
+            : null;
+    }
 
     public function assignedTo(): ?User
     {

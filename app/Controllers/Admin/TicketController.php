@@ -162,37 +162,27 @@ class TicketController extends Controller
             return;
         }
 
-        $errors = $ticket->validate($data);
-
-        if ($errors) {
-            flash("error", implode("<br>", $errors));
-            redirect("/admin/chamados/editar/" . $ticket->getId());
+        if (empty($data["priority"]) || empty($data["status"])) {
+            flash("error", "Prioridade e Status são obrigatórios");
+            redirect("/admin/chamados/editar/" . $data["id"]);
             return;
         }
 
         try {
             $ticket->fill([
-                "title" => $data["title"],
-                "description" => $data["description"],
-                "school_id" => $data["school_id"],
-                "category_id" => $data["category_id"],
                 "priority" => $data["priority"],
-                "opened_by" => $data["opened_by"],
                 "status" => $data["status"]
             ]);
-
             $ticket->save();
 
-        } catch (\InvalidArgumentException $exception) {
-
-            flash("error", $exception->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            flash("error", $e->getMessage());
             redirect("/admin/chamados/editar/" . $data["id"]);
             return;
         }
 
         flash("success", "Chamado atualizado com sucesso.");
         redirect("/admin/chamados/editar/" . $ticket->getId());
-        return;
     }
 
     public function open(?array $data): void

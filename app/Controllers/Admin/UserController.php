@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Controllers\Admin;
 
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Models\School;
+use App\Models\SchoolUser;
 use App\Models\User;
 use CoffeeCode\Paginator\Paginator;
 
@@ -20,18 +20,12 @@ class UserController extends Controller
     public function index(?array $data): void
     {
         $page = $data["page"] ?? 1;
-
         $limit = 10;
 
         $userModel = new User();
-
         $total = $userModel->count();
 
-        $paginator = new Paginator(
-            url("/admin/usuarios/"),
-            "Página"
-        );
-
+        $paginator = new Paginator(url("/admin/usuarios/"), "Página");
         $paginator->pager($total, $limit, $page);
 
         $users = $userModel
@@ -41,8 +35,8 @@ class UserController extends Controller
             ->get();
 
         echo $this->view->render('/admin/user/index', [
-            "title" => "Usuários Cadastrados | " . APP_NAME,
-            "users" => $users,
+            "title"     => "Usuários Cadastrados | " . APP_NAME,
+            "users"     => $users,
             "paginator" => $paginator
         ]);
     }
@@ -52,7 +46,7 @@ class UserController extends Controller
         $schools = School::all();
 
         echo $this->view->render('/admin/user/create', [
-            "title" => "Cadastrar Novo Usuário | " . APP_NAME,
+            "title"   => "Cadastrar Novo Usuário | " . APP_NAME,
             "schools" => $schools
         ]);
     }
@@ -66,7 +60,6 @@ class UserController extends Controller
         }
 
         $user = new User();
-
         $errors = $user->validate($data);
 
         if ($errors) {
@@ -75,63 +68,73 @@ class UserController extends Controller
             return;
         }
 
-        $userExists = User::findByEmail($data["email"]);
-
-        if ($userExists) {
+        if (User::findByEmail($data["email"])) {
             flash("warning", "Este email já está cadastrado.");
             redirect("/admin/usuarios/cadastrar");
             return;
         }
 
-        try {
+        $role = $data["role"] ?? "professor";
 
+        if ($role === "professor") {
+            $linkErrors = SchoolUser::validateLinks($data["schools"] ?? []);
+            if ($linkErrors) {
+                flash("error", implode("<br>", $linkErrors));
+                redirect("/admin/usuarios/cadastrar");
+                return;
+            }
+        }
+
+        try {
             $user->fill([
-                "school_id" => $data["school_id"] ?? null,
-                "name" => $data["name"],
-                "email" => $data["email"],
+                "name"     => $data["name"],
+                "email"    => $data["email"],
                 "password" => $data["password"],
                 "document" => $data["document"] ?? null,
-                "role" => $data["role"] ?? "professor",
-                "status" => $data["status"] ?? "registrado"
+                "role"     => $role,
+                "status"   => $data["status"] ?? "registrado"
             ]);
-
             $user->save();
 
-        } catch (\InvalidArgumentException $exception) {
+            if ($user->getRole() === "professor") {
+                $this->syncSchoolLinks($user->getId(), $data["schools"] ?? []);
+            }
 
-            flash("error", $exception->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            flash("error", $e->getMessage());
             redirect("/admin/usuarios/cadastrar");
             return;
         }
 
         flash("success", "Usuário cadastrado com sucesso.");
         redirect("/admin/usuarios/editar/" . $user->getId());
-        return;
     }
 
     public function edit(?array $data): void
     {
-        $id = $data['id'] ?? null;
+        $id = $data["id"] ?? null;
 
         if (!$id) {
-            redirect('/admin/usuarios');
+            redirect("/admin/usuarios");
             return;
         }
 
         $user = User::find($id);
 
         if (!$user) {
-            flash('error', 'Usuário não encontrado');
-            redirect('/admin/usuarios');
+            flash("error", "Usuário não encontrado.");
+            redirect("/admin/usuarios");
             return;
         }
 
-        $schools = School::all();
+        $schools     = School::all();
+        $userSchools = $user->schools();
 
-        echo $this->view->render('/admin/user/edit', [
-            'title' => 'Editar Usuário | ' . APP_NAME,
-            'user' => $user,
-            'schools' => $schools
+        echo $this->view->render("/admin/user/edit", [
+            "title"       => "Editar Usuário | " . APP_NAME,
+            "user"        => $user,
+            "schools"     => $schools,
+            "userSchools" => $userSchools
         ]);
     }
 
@@ -158,70 +161,123 @@ class UserController extends Controller
         }
 
         $errors = $user->validate($data);
-
         if ($errors) {
             flash("error", implode("<br>", $errors));
             redirect("/admin/usuarios/editar/" . $user->getId());
             return;
         }
 
-        if(empty($data["school_id"])){
-            flash("error", "A escola é obrigatória");
-            redirect("/admin/usuarios/editar/" . $user->getId());
-            return;
-        }
-
-        $userExists = User::findByEmail($data["email"]);
-
-        if ($userExists && $userExists->getId() !== $user->getId()) {
+        $existing = User::findByEmail($data["email"]);
+        if ($existing && $existing->getId() !== $user->getId()) {
             flash("warning", "Este email já está cadastrado.");
             redirect("/admin/usuarios/editar/" . $user->getId());
             return;
         }
 
-        try {
+        $role = $data["role"] ?? $user->getRole();
 
+        if ($role === "professor") {
+            $linkErrors = SchoolUser::validateLinks($data["schools"] ?? []);
+            if ($linkErrors) {
+                flash("error", implode("<br>", $linkErrors));
+                redirect("/admin/usuarios/editar/" . $user->getId());
+                return;
+            }
+        }
+
+        try {
             $user->fill([
-                "school_id" => $data["school_id"] ?? null,
-                "name" => $data["name"],
-                "email" => $data["email"],
+                "name"     => $data["name"],
+                "email"    => $data["email"],
                 "password" => $data["password"] ?? null,
                 "document" => $data["document"] ?? null,
-                "role" => $data["role"],
-                "status" => $data["status"]
+                "role"     => $role,
+                "status"   => $data["status"]
             ]);
-
             $user->save();
 
-        } catch (\InvalidArgumentException $exception) {
+            if ($user->getRole() === "professor") {
+                $this->syncSchoolLinks($user->getId(), $data["schools"] ?? []);
+            } else {
+                $this->removeAllSchoolLinks($user->getId());
+            }
 
-            flash("error", $exception->getMessage());
-            redirect("/admin/usuarios/editar/" . $data["id"]);
+        } catch (\InvalidArgumentException $e) {
+            flash("error", $e->getMessage());
+            redirect("/admin/usuarios/editar/" . $user->getId());
             return;
         }
 
         flash("success", "Usuário atualizado com sucesso.");
         redirect("/admin/usuarios/editar/" . $user->getId());
-        return;
     }
 
     public function delete(?array $data): void
     {
-        var_dump($data);
+        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
+            flash("error", "Token de segurança inválido.");
+            redirect("/admin/usuarios");
+            return;
+        }
+
+        $id = $data["id"] ?? null;
+
+        if (!$id) {
+            flash("error", "Usuário inválido.");
+            redirect("/admin/usuarios");
+            return;
+        }
+
+        $user = User::find($id);
+
+        if (!$user) {
+            flash("error", "Usuário não encontrado.");
+            redirect("/admin/usuarios");
+            return;
+        }
+
+        $user->delete();
+
+        flash("success", "Usuário removido com sucesso.");
+        redirect("/admin/usuarios");
     }
 
-    public function requests(?array $data): void
+    public function requests(?array $data): void {}
+
+    public function technicians(?array $data): void {}
+
+    public function teachers(?array $data): void {}
+
+    private function syncSchoolLinks(int $userId, array $schools): void
     {
-        
+        $this->removeAllSchoolLinks($userId);
+
+        foreach ($schools as $entry) {
+            $schoolId = (int) ($entry["school_id"] ?? 0);
+            $shift    = $entry["shift"] ?? "integral";
+
+            if (!$schoolId) {
+                continue;
+            }
+
+            $link = new SchoolUser();
+            $link->fill([
+                "school_id" => $schoolId,
+                "user_id"   => $userId,
+                "shift"     => $shift
+            ]);
+            $link->save();
+        }
     }
 
-    public function technicians(?array $data): void
+    private function removeAllSchoolLinks(int $userId): void
     {
-        
-    }
+        $links = (new SchoolUser())
+            ->where("user_id", "=", $userId)
+            ->get();
 
-    public function teachers(?array $data): void
-    {
-
+        foreach ($links as $link) {
+            $link->delete();
+        }
     }
 }
