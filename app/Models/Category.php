@@ -25,38 +25,34 @@ class Category extends AbstractModel
 
     public function setName(string $name): void
     {
-        $name = trim($name);
-
-        if (strlen($name) < 3) {
-            throw new InvalidArgumentException("A categoria deve ter pelo menos 3 caracteres.");
+        $name = trim(strip_tags($name));
+        if (strlen($name) < 5) {
+            throw new InvalidArgumentException("A categoria deve ter pelo menos 5 caracteres.");
         }
-
         $this->attributes["name"] = $name;
     }
 
     public function setDescription(string $description): void
     {
-        $description = trim($description);
-
-        if (strlen($description) < 12) {
-            throw new InvalidArgumentException("A descrição deve ter pelo menos 12 caracteres.");
+        $description = trim(strip_tags($description));
+        if (strlen($description) < 20) {
+            throw new InvalidArgumentException("A descrição deve ter pelo menos 20 caracteres.");
         }
-
         $this->attributes["description"] = $description;
     }
 
-    public function getId()
+    public function getId(): ?int
     {
-        return $this->attributes["id"];
+        return $this->attributes["id"] ?? null;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->attributes["name"];
+        return $this->attributes["name"] ?? null;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
-        return $this->attributes["description"];
+        return $this->attributes["description"] ?? null;
     }
 }
