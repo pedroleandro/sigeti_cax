@@ -26,7 +26,7 @@ class User extends AbstractModel
 
     public function setName(string $name): void
     {
-        $name = trim($name);
+        $name = trim(strip_tags($name));
         if (strlen($name) < 3) {
             throw new \InvalidArgumentException("O nome deve ter pelo menos 3 caracteres");
         }
