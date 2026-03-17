@@ -78,17 +78,8 @@ class SchoolUser extends AbstractModel
             ->first();
     }
 
-    /**
-     * Valida os vínculos antes de salvar.
-     * Retorna array de erros ou array vazio se tudo estiver ok.
-     *
-     * Regras:
-     * - Se qualquer vínculo for "integral", não pode haver mais de um vínculo
-     * - O mesmo turno não pode se repetir em vínculos diferentes
-     */
     public static function validateLinks(array $schools): array
     {
-        // filtra entradas vazias
         $schools = self::filterValidLinks($schools);
 
         if (empty($schools)) {
@@ -96,22 +87,20 @@ class SchoolUser extends AbstractModel
         }
 
         $errors = [];
-        $shifts = array_column($schools, "shift");
+        $shifts  = array_column($schools, "shift");
 
-        // regra 1: se algum turno for integral, não pode ter mais de um vínculo
         if (in_array("integral", $shifts) && count($schools) > 1) {
             $errors[] = "Um professor com turno integral não pode ser vinculado a outra escola em nenhum turno.";
         }
 
-        // regra 2: o mesmo turno não pode aparecer mais de uma vez
         $shiftCounts = array_count_values($shifts);
         foreach ($shiftCounts as $shift => $count) {
             if ($count > 1) {
-                $label = match ($shift) {
-                    "manha" => "Manhã",
-                    "tarde" => "Tarde",
+                $label    = match ($shift) {
+                    "manha"    => "Manhã",
+                    "tarde"    => "Tarde",
                     "integral" => "Integral",
-                    default => $shift
+                    default    => $shift
                 };
                 $errors[] = "O turno \"{$label}\" não pode ser usado em mais de uma escola.";
             }
