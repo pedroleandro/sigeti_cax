@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Core\AbstractModel;
@@ -8,9 +7,7 @@ use InvalidArgumentException;
 class Ticket extends AbstractModel
 {
     protected string $table = "tickets";
-
     protected string $primaryKey = "id";
-
     protected array $fillable = [
         "title",
         "description",
@@ -23,36 +20,30 @@ class Ticket extends AbstractModel
         "opened_at",
         "closed_at",
     ];
-
     protected array $required = [
-        "title" => "O título do chamado é obrigatório.",
+        "title"       => "O título do chamado é obrigatório.",
         "description" => "A descrição do chamado é obrigatória.",
-        "school_id" => "A escola é obrigatória.",
+        "school_id"   => "A escola é obrigatória.",
         "category_id" => "A categoria é obrigatória.",
-        "opened_by" => "O professor é obrigatório"
+        "opened_by"   => "O professor é obrigatório"
     ];
-
     protected bool $timestamps = true;
 
     public function setTitle(string $title): void
     {
-        $title = trim($title);
-
+        $title = trim(strip_tags($title));
         if (strlen($title) < 10) {
             throw new InvalidArgumentException("O título deve ter pelo menos 10 caracteres.");
         }
-
         $this->attributes["title"] = $title;
     }
 
     public function setDescription(string $description): void
     {
-        $description = trim($description);
-
-        if (strlen($description) < 20) {
-            throw new InvalidArgumentException("A descrição deve ter pelo menos 20 caracteres.");
+        $description = trim(strip_tags($description));
+        if (strlen($description) < 30) {
+            throw new InvalidArgumentException("A descrição deve ter pelo menos 30 caracteres.");
         }
-
         $this->attributes["description"] = $description;
     }
 
@@ -88,11 +79,9 @@ class Ticket extends AbstractModel
     public function setPriority(string $priority): void
     {
         $priorities = ["alta", "media", "baixa"];
-
         if (!in_array($priority, $priorities)) {
             throw new InvalidArgumentException("Prioridade inválida.");
         }
-
         $this->attributes["priority"] = $priority;
     }
 
