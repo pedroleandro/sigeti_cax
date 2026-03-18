@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Auth;
 use App\Core\Controller;
+use App\Core\Session;
 use App\Models\Ticket;
 use CoffeeCode\Paginator\Paginator;
 
@@ -55,10 +56,15 @@ class DashboardController extends Controller
             ->offset($paginator->offset())
             ->get();
 
+        if((new Session())->has("auth")){
+            $user = (new Session())->auth;
+        }
+
         echo $this->view->render("admin/dashboard", [
             "title" => "Dashboard | " . APP_NAME,
             "counts" => $counts,
             "tickets" => $tickets,
+            "user" => $user ?? [],
             "paginator" => $paginator
         ]);
     }

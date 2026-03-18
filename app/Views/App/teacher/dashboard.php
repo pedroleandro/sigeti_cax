@@ -1,5 +1,6 @@
 <?php $this->layout('teacher/app', [
         'title' => $title,
+        'user' => $user
 ]) ?>
 
 <!-- Begin Page Content -->

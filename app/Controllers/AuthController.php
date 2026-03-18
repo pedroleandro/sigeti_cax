@@ -105,14 +105,17 @@ class AuthController extends Controller
 
                 if ($auth->role === "tecnico") {
                     redirect("/admin/dashboard");
+                    return;
                 }
 
                 if ($auth->role === "professor") {
                     redirect("/professor/dashboard");
+                    return;
                 }
             }
 
             redirect("/entrar");
+            return;
         }
 
         $session->unset("auth");
@@ -121,6 +124,7 @@ class AuthController extends Controller
         flash("success", "Sessão encerrada, mas volte logo!");
 
         redirect("/entrar");
+        return;
     }
 
     public function register()
@@ -135,6 +139,7 @@ class AuthController extends Controller
         if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
             flash("error", "Token de segurança inválido.");
             redirect("/entrar");
+            return;
         }
 
         $required = [
@@ -179,10 +184,12 @@ class AuthController extends Controller
         } catch (\InvalidArgumentException $exception) {
             flash("error", $exception->getMessage());
             redirect("/registrar");
+            return;
         }
 
         flash("success", "Conta criada com sucesso.");
         redirect("/entrar");
+        return;
     }
 
     public function forgotPassword()
