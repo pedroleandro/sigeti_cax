@@ -201,4 +201,24 @@ class Ticket extends AbstractModel
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
         return array_map(fn($row) => static::hydrate($row), $rows);
     }
+
+    public function allOrderedByUser(int $userId, int $limit, int $offset): array
+    {
+        $sql = "SELECT * FROM {$this->table}
+            WHERE opened_by = :user_id
+            ORDER BY
+                FIELD(status, 'aberto', 'em_andamento', 'aguardando', 'resolvido', 'finalizado', 'arquivado'),
+                FIELD(priority, 'alta', 'media', 'baixa'),
+                opened_at ASC
+            LIMIT :limit OFFSET :offset";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':user_id', $userId, PDO::PARAM_INT);
+        $statement->bindValue(':limit',   $limit,  PDO::PARAM_INT);
+        $statement->bindValue(':offset',  $offset, PDO::PARAM_INT);
+        $statement->execute();
+
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return array_map(fn($row) => static::hydrate($row), $rows);
+    }
 }

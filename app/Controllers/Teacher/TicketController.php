@@ -35,12 +35,11 @@ class TicketController extends Controller
 
         $paginator->pager($total, $limit, $page);
 
-        $tickets = $ticketModel
-            ->where('opened_by', '=', Auth::user()->id)
-            ->orderBy("created_at", "DESC")
-            ->limit($paginator->limit())
-            ->offset($paginator->offset())
-            ->get();
+        $tickets = (new Ticket())->allOrderedByUser(
+            Auth::user()->id,
+            $paginator->limit(),
+            $paginator->offset()
+        );
 
         echo $this->view->render("teacher/ticket/index", [
             "title" => "Dashboard | " . APP_NAME,

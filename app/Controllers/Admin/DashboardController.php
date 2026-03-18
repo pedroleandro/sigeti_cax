@@ -48,13 +48,10 @@ class DashboardController extends Controller
         $paginator = new Paginator(url("/admin/dashboard/"), "Página");
         $paginator->pager($total, $limit, $page);
 
-        $tickets = (new Ticket())
-            ->whereIn('status', ['aberto', 'em_andamento', 'aguardando'])
-            ->orderBy('priority', 'DESC')
-            ->orderBy('opened_at', 'ASC')
-            ->limit($paginator->limit())
-            ->offset($paginator->offset())
-            ->get();
+        $tickets = (new Ticket())->allOrdered(
+            $paginator->limit(),
+            $paginator->offset()
+        );
 
         if((new Session())->has("auth")){
             $user = (new Session())->auth;
