@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Core\AbstractModel;
 use InvalidArgumentException;
+use PDO;
 
 class Ticket extends AbstractModel
 {
@@ -181,5 +182,23 @@ class Ticket extends AbstractModel
     public function getTicketsByStatus(string $status): array
     {
         return $this->where('status', "=", $status)->get();
+    }
+
+    public function allOrdered(int $limit, int $offset): array
+    {
+        $sql = "SELECT * FROM {$this->table}
+            ORDER BY 
+                FIELD(status, 'aberto', 'em_andamento', 'aguardando', 'resolvido', 'finalizado', 'arquivado'),
+                FIELD(priority, 'alta', 'media', 'baixa'),
+                opened_at ASC
+            LIMIT :limit OFFSET :offset";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':limit',  $limit,  PDO::PARAM_INT);
+        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return array_map(fn($row) => static::hydrate($row), $rows);
     }
 }

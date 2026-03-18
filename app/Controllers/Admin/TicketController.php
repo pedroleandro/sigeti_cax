@@ -22,28 +22,21 @@ class TicketController extends Controller
     public function index(?array $data): void
     {
         $page = $data["page"] ?? 1;
-
         $limit = 10;
 
         $ticketModel = new Ticket();
-
         $total = $ticketModel->count();
 
-        $paginator = new Paginator(
-            url("/admin/chamados/"),
-            "Página"
-        );
-
+        $paginator = new Paginator(url("/admin/chamados/"), "Página");
         $paginator->pager($total, $limit, $page);
 
-        $tickets = $ticketModel
-            ->orderBy("created_at", "DESC")
-            ->limit($paginator->limit())
-            ->offset($paginator->offset())
-            ->get();
+        $tickets = $ticketModel->allOrdered(
+            $paginator->limit(),
+            $paginator->offset()
+        );
 
         echo $this->view->render('/admin/ticket/index', [
-            "title" => "Chamados Cadastrados | " . APP_NAME,
+            "title" => "Chamados | " . APP_NAME,
             "tickets" => $tickets,
             "paginator" => $paginator
         ]);

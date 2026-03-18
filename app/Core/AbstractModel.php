@@ -232,6 +232,30 @@ abstract class AbstractModel
         return $this;
     }
 
+    public function whereIn(string $column, array $values): self
+    {
+        $placeholders = [];
+        foreach ($values as $i => $value) {
+            $param = $column . '_in_' . $i;
+            $placeholders[] = ':' . $param;
+            $this->params[$param] = $value;
+        }
+        $this->wheres[] = "{$column} IN (" . implode(', ', $placeholders) . ")";
+        return $this;
+    }
+
+    public function countGroupBy(string $column): array
+    {
+        $sql = "SELECT {$column}, COUNT(*) as total FROM {$this->table}";
+        if (!empty($this->wheres)) {
+            $sql .= " WHERE " . implode(' AND ', $this->wheres);
+        }
+        $sql .= " GROUP BY {$column}";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute($this->params);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function first(): ?static
     {
         $this->limit(1);
@@ -327,7 +351,7 @@ abstract class AbstractModel
         $statement = $this->connection->prepare($sql);
         $statement->execute($this->params);
 
-        return (int) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
     }
 
     protected static function hydrate(array $data): static
