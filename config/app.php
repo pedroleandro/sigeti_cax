@@ -8,6 +8,8 @@ $dotenv->load();
 define("APP_URL", $_ENV['APP_URL'] ?? "http://localhost/sigeti_cax");
 define("APP_NAME", $_ENV['APP_NAME'] ?? "SIGETI - Sistema de Gestão de Chamados de TI");
 
+define("APP_TIMEZONE", $_ENV['APP_TIMEZONE'] ?? 'America/Sao_Paulo');
+
 define("DB_CONNECTION", $_ENV['DB_CONNECTION'] ?? "yourdbsql");
 define("DB_HOST", $_ENV['DB_HOST'] ?? "yourhost.com");
 define("DB_PORT", $_ENV['DB_PORT'] ?? "9999");

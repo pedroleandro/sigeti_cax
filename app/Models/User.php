@@ -83,9 +83,11 @@ class User extends AbstractModel
         $this->attributes["status"] = $status;
     }
 
-    public function setLastLoginAt(?string $date): void
+    public function setLastLoginAt(): void
     {
-        $this->attributes["last_login_at"] = $date;
+        $timezone = new \DateTimeZone($_ENV['APP_TIMEZONE'] ?? 'America/Sao_Paulo');
+        $now = new \DateTimeImmutable('now', $timezone);
+        $this->attributes["last_login_at"] = $now->format('Y-m-d H:i:s');
     }
 
     public function getId(): ?int

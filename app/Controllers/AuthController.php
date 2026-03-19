@@ -76,6 +76,9 @@ class AuthController extends Controller
 
         $session->regenerate();
 
+        $user->setLastLoginAt();
+        $user->save();
+
         if ($user->getRole() === "tecnico") {
             flash("success", "Bem-vindo, {$user->getName()}!");
             redirect("/admin/dashboard");
