@@ -77,6 +77,62 @@
         </div>
     </div>
 
+    <!-- Content Row -->
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Chamados resolvidos por mês durante o ano
+                        de <?= $year ?? date('Y') ?></h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="myAreaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Chamados por Categoria</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="myPieChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <?php
+                        $colors = [
+                                '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+                                '#858796', '#5a5c69', '#2e59d9', '#17a673', '#2c9faf',
+                                '#f4b619', '#be2617', '#6610f2', '#fd7e14', '#20c9a6',
+                                '#e83e8c', '#6f42c1', '#007bff', '#28a745', '#dc3545'
+                        ];
+                        foreach ($categoryNames as $key => $name):
+                            ?>
+                            <span class="mr-2">
+                                <i class="fas fa-circle" style="color: <?= $colors[$key] ?? '#' . substr(md5($name), 0, 6) ?>"></i>
+                                <?= $name ?> (<?= $categoryTotals[$key] ?>)
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Tabela de chamados que precisam de ação -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex align-items-center justify-content-between">
@@ -112,7 +168,7 @@
                                     $badge = match ($priority) {
                                         'baixa' => 'badge-secondary',
                                         'media' => 'badge-info',
-                                        'alta'  => 'badge-danger',
+                                        'alta' => 'badge-danger',
                                         default => 'badge-secondary'
                                     };
                                     ?>
@@ -124,10 +180,10 @@
                                     <?php
                                     $status = $ticket->getStatus();
                                     $badge = match ($status) {
-                                        'aberto'       => 'badge-warning',
+                                        'aberto' => 'badge-warning',
                                         'em_andamento' => 'badge-primary',
-                                        'aguardando'   => 'badge-info',
-                                        default        => 'badge-secondary'
+                                        'aguardando' => 'badge-info',
+                                        default => 'badge-secondary'
                                     };
                                     ?>
                                     <span class="badge <?= $badge ?>">
@@ -157,4 +213,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        var monthlyData = <?= json_encode($monthlyData) ?>;
+        var categoryLabels = <?= json_encode($categoryNames) ?>;
+        var categoryTotals = <?= json_encode($categoryTotals) ?>;
+        var categoryColors = [
+            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+            '#858796', '#5a5c69', '#2e59d9', '#17a673', '#2c9faf',
+            '#f4b619', '#be2617', '#6610f2', '#fd7e14', '#20c9a6',
+            '#e83e8c', '#6f42c1', '#007bff', '#28a745', '#dc3545'
+        ].slice(0, categoryLabels.length);
+    </script>
+
 </div>

@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
+use App\Models\Category;
 use App\Models\Ticket;
 use CoffeeCode\Paginator\Paginator;
 
@@ -53,16 +54,36 @@ class DashboardController extends Controller
             $paginator->offset()
         );
 
-        if((new Session())->has("auth")){
+        if ((new Session())->has("auth")) {
             $user = (new Session())->auth;
         }
+
+        $year = 2024; //(int)date("Y");
+        $months = array_fill(1, 12, 0);
+
+        foreach ((new Ticket())->countByMonth($year) as $row) {
+            $months[(int)$row['month']] = (int)$row['total'];
+        }
+
+        $monthlyData = array_values($months);
+
+        $categories = Category::all();
+
+        $categoryData   = (new Ticket())->countByCategory();
+        $categoryNames  = array_column($categoryData, 'category');
+        $categoryTotals = array_column($categoryData, 'total');
 
         echo $this->view->render("admin/dashboard", [
             "title" => "Dashboard | " . APP_NAME,
             "counts" => $counts,
             "tickets" => $tickets,
             "user" => $user ?? [],
-            "paginator" => $paginator
+            "paginator" => $paginator,
+            "year" => $year,
+            "monthlyData" => $monthlyData,
+            "categories" => $categories,
+            "categoryNames"  => $categoryNames,
+            "categoryTotals" => $categoryTotals,
         ]);
     }
 }

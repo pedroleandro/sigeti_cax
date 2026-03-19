@@ -221,4 +221,33 @@ class Ticket extends AbstractModel
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
         return array_map(fn($row) => static::hydrate($row), $rows);
     }
+
+    public function countByMonth(int $year): array
+    {
+        $sql = "SELECT MONTH(opened_at) as month, COUNT(*) as total
+            FROM {$this->table}
+            WHERE YEAR(opened_at) = :year
+            AND deleted_at IS NULL
+            GROUP BY MONTH(opened_at)
+            ORDER BY month ASC";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':year', $year, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countByCategory(): array
+    {
+        $sql = "SELECT c.name as category, COUNT(t.id) as total
+            FROM {$this->table} t
+            INNER JOIN categories c ON c.id = t.category_id
+            WHERE t.deleted_at IS NULL
+            GROUP BY t.category_id, c.name
+            ORDER BY total DESC";
+
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
