@@ -123,6 +123,7 @@ class TicketController extends Controller
         $schools = School::all();
         $categories = Category::all();
         $teachers = (new User())->where("role", "!=", "tecnico")->get();
+        $technicians = (new User())->where("role", "=", "tecnico")->get();
 
         echo $this->view->render('/admin/ticket/edit', [
             'title' => 'Editar Chamado | ' . APP_NAME,
@@ -130,6 +131,7 @@ class TicketController extends Controller
             "schools" => $schools,
             "categories" => $categories,
             "teachers" => $teachers,
+            "technicians" => $technicians,
         ]);
     }
 
@@ -164,12 +166,13 @@ class TicketController extends Controller
         try {
             $ticket->fill([
                 "priority" => $data["priority"],
-                "status" => $data["status"]
+                "status" => $data["status"],
+                "assigned_to" => !empty($data["assigned_to"]) ? (int) $data["assigned_to"] : null
             ]);
             $ticket->save();
 
-        } catch (\InvalidArgumentException $e) {
-            flash("error", $e->getMessage());
+        } catch (\InvalidArgumentException $exception) {
+            flash("error", $exception->getMessage());
             redirect("/admin/chamados/editar/" . $data["id"]);
             return;
         }

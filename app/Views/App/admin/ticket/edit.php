@@ -53,6 +53,19 @@
                             <input type="hidden" name="id" value="<?= $ticket->getId() ?>">
 
                             <div class="form-group">
+                                <label class="font-weight-bold">Técnico Responsável</label>
+                                <select class="form-control" name="assigned_to">
+                                    <option value="">— Sem técnico atribuído —</option>
+                                    <?php foreach ($technicians as $technician): ?>
+                                        <option value="<?= $technician->getId() ?>"
+                                                <?= $ticket->getAssignedTo() == $technician->getId() ? 'selected' : '' ?>>
+                                            <?= $technician->getName() ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="font-weight-bold">Prioridade</label>
                                 <select class="form-control" name="priority">
                                     <option value="baixa" <?= $ticket->getPriority() === 'baixa' ? 'selected' : '' ?>>
