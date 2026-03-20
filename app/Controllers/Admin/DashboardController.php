@@ -58,7 +58,7 @@ class DashboardController extends Controller
             $user = (new Session())->auth;
         }
 
-        $year = 2024; //(int)date("Y");
+        $year = 2024;
         $months = array_fill(1, 12, 0);
 
         foreach ((new Ticket())->countByMonth($year) as $row) {
@@ -69,7 +69,7 @@ class DashboardController extends Controller
 
         $categories = Category::all();
 
-        $categoryData   = (new Ticket())->countByCategory();
+        $categoryData   = (new Ticket())->countByCategory($year);
         $categoryNames  = array_column($categoryData, 'category');
         $categoryTotals = array_column($categoryData, 'total');
 

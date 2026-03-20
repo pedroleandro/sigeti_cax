@@ -194,12 +194,12 @@ class Ticket extends AbstractModel
             LIMIT :limit OFFSET :offset";
 
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(':limit',  $limit,  PDO::PARAM_INT);
-        $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit',  $limit,  PDO::PARAM_INT);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
 
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return array_map(fn($row) => static::hydrate($row), $rows);
+        return array_map(static fn($row) => static::hydrate($row), $rows);
     }
 
     public function allOrderedByUser(int $userId, int $limit, int $offset): array
@@ -213,13 +213,13 @@ class Ticket extends AbstractModel
             LIMIT :limit OFFSET :offset";
 
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(':user_id', $userId, PDO::PARAM_INT);
-        $statement->bindValue(':limit',   $limit,  PDO::PARAM_INT);
-        $statement->bindValue(':offset',  $offset, PDO::PARAM_INT);
+        $statement->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $statement->bindParam(':limit',   $limit,  PDO::PARAM_INT);
+        $statement->bindParam(':offset',  $offset, PDO::PARAM_INT);
         $statement->execute();
 
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return array_map(fn($row) => static::hydrate($row), $rows);
+        return array_map(static fn($row) => static::hydrate($row), $rows);
     }
 
     public function countByMonth(int $year): array
@@ -232,21 +232,23 @@ class Ticket extends AbstractModel
             ORDER BY month ASC";
 
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(':year', $year, PDO::PARAM_INT);
+        $statement->bindParam(':year', $year, PDO::PARAM_INT);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function countByCategory(): array
+    public function countByCategory(int $year): array
     {
         $sql = "SELECT c.name as category, COUNT(t.id) as total
             FROM {$this->table} t
             INNER JOIN categories c ON c.id = t.category_id
-            WHERE t.deleted_at IS NULL
+            WHERE YEAR(opened_at) = :year
+            AND t.deleted_at IS NULL
             GROUP BY t.category_id, c.name
             ORDER BY total DESC";
 
         $statement = $this->connection->prepare($sql);
+        $statement->bindParam(':year', $year, PDO::PARAM_INT);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
