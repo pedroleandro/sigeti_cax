@@ -29,8 +29,6 @@ class TicketComment extends AbstractModel
         return $this->attributes["id"];
     }
 
-
-
     public function setTicketId(int $ticketId): void
     {
         $this->attributes["ticket_id"] = $ticketId;
@@ -50,7 +48,6 @@ class TicketComment extends AbstractModel
     {
         return $this->attributes["user_id"] ?? null;
     }
-
 
     public function setComment(string $comment): void
     {

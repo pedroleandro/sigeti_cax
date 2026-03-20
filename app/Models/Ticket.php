@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Core\AbstractModel;
@@ -22,13 +23,18 @@ class Ticket extends AbstractModel
         "closed_at",
     ];
     protected array $required = [
-        "title"       => "O título do chamado é obrigatório.",
+        "title" => "O título do chamado é obrigatório.",
         "description" => "A descrição do chamado é obrigatória.",
-        "school_id"   => "A escola é obrigatória.",
+        "school_id" => "A escola é obrigatória.",
         "category_id" => "A categoria é obrigatória.",
-        "opened_by"   => "O professor é obrigatório"
+        "opened_by" => "O professor é obrigatório"
     ];
     protected bool $timestamps = true;
+
+    public function getId(): ?int
+    {
+        return $this->attributes["id"] ?? null;
+    }
 
     public function setTitle(string $title): void
     {
@@ -37,6 +43,11 @@ class Ticket extends AbstractModel
             throw new InvalidArgumentException("O título deve ter pelo menos 10 caracteres.");
         }
         $this->attributes["title"] = $title;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->attributes["title"];
     }
 
     public function setDescription(string $description): void
@@ -48,9 +59,19 @@ class Ticket extends AbstractModel
         $this->attributes["description"] = $description;
     }
 
+    public function getDescription(): string
+    {
+        return $this->attributes["description"];
+    }
+
     public function setSchoolId(int $schoolId): void
     {
         $this->attributes["school_id"] = $schoolId;
+    }
+
+    public function getSchoolId(): int
+    {
+        return $this->attributes["school_id"];
     }
 
     public function setCategoryId(int $categoryId): void
@@ -58,14 +79,29 @@ class Ticket extends AbstractModel
         $this->attributes["category_id"] = $categoryId;
     }
 
+    public function getCategoryId(): int
+    {
+        return (int)$this->attributes["category_id"];
+    }
+
     public function setOpenedBy(int $userId): void
     {
         $this->attributes["opened_by"] = $userId;
     }
 
+    public function getOpenedBy(): int
+    {
+        return (int)$this->attributes["opened_by"];
+    }
+
     public function setAssignedTo(?int $userId): void
     {
         $this->attributes["assigned_to"] = $userId;
+    }
+
+    public function getAssignedTo(): ?int
+    {
+        return $this->attributes["assigned_to"] ?? null;
     }
 
     public function setStatus(string $status): void
@@ -77,6 +113,11 @@ class Ticket extends AbstractModel
         $this->attributes["status"] = $status;
     }
 
+    public function getStatus(): ?string
+    {
+        return $this->attributes["status"] ?? null;
+    }
+
     public function setPriority(string $priority): void
     {
         $priorities = ["alta", "media", "baixa"];
@@ -86,64 +127,24 @@ class Ticket extends AbstractModel
         $this->attributes["priority"] = $priority;
     }
 
-    public function setOpenedAt(?string $date): void
-    {
-        $this->attributes["opened_at"] = $date;
-    }
-
-    public function setClosedAt(?string $date): void
-    {
-        $this->attributes["closed_at"] = $date;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->attributes["id"] ?? null;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->attributes["title"] ?? null;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->attributes["description"] ?? null;
-    }
-
-    public function getSchoolId(): ?int
-    {
-        return $this->attributes["school_id"] ?? null;
-    }
-
-    public function getCategoryId(): ?int
-    {
-        return $this->attributes["category_id"] ?? null;
-    }
-
-    public function getOpenedBy(): ?int
-    {
-        return $this->attributes["opened_by"] ?? null;
-    }
-
-    public function getAssignedTo(): ?int
-    {
-        return $this->attributes["assigned_to"] ?? null;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->attributes["status"] ?? null;
-    }
-
     public function getPriority(): ?string
     {
         return $this->attributes["priority"] ?? null;
     }
 
+    public function setOpenedAt(?string $date): void
+    {
+        $this->attributes["opened_at"] = $date;
+    }
+
     public function getOpenedAt(): ?string
     {
         return $this->attributes["opened_at"] ?? null;
+    }
+
+    public function setClosedAt(?string $date): void
+    {
+        $this->attributes["closed_at"] = $date;
     }
 
     public function getClosedAt(): ?string
@@ -153,28 +154,28 @@ class Ticket extends AbstractModel
 
     public function school(): ?School
     {
-        return $this->getSchoolId()
+        return $this->getSchoolId() > 0
             ? School::find($this->getSchoolId())
             : null;
     }
 
     public function category(): ?Category
     {
-        return $this->getCategoryId()
+        return $this->getCategoryId() > 0
             ? Category::find($this->getCategoryId())
             : null;
     }
 
     public function openedBy(): ?User
     {
-        return $this->getOpenedBy()
+        return $this->getOpenedBy() > 0
             ? User::find($this->getOpenedBy())
             : null;
     }
 
     public function assignedTo(): ?User
     {
-        return $this->getAssignedTo()
+        return $this->getAssignedTo() !== null
             ? User::find($this->getAssignedTo())
             : null;
     }
@@ -194,7 +195,7 @@ class Ticket extends AbstractModel
             LIMIT :limit OFFSET :offset";
 
         $statement = $this->connection->prepare($sql);
-        $statement->bindParam(':limit',  $limit,  PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
 
@@ -214,8 +215,8 @@ class Ticket extends AbstractModel
 
         $statement = $this->connection->prepare($sql);
         $statement->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $statement->bindParam(':limit',   $limit,  PDO::PARAM_INT);
-        $statement->bindParam(':offset',  $offset, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
         $statement->execute();
 
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);

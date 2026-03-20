@@ -18,6 +18,17 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet"/>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="<?= assets('/css/styles-creative.css') ?>" rel="stylesheet"/>
+    <link href="<?= assets('/css/custom.css') ?>" rel="stylesheet"/>
+
+    <style>
+        header.masthead {
+            background-image: linear-gradient(
+                    to bottom,
+                    rgba(15, 30, 80, 0.85),
+                    rgba(15, 30, 80, 0.85)
+            ), url("<?= assets('/images/bg-masthead.jpg') ?>");
+        }
+    </style>
 </head>
 <body id="page-top">
 <!-- Navigation-->
@@ -33,7 +44,6 @@
                 <li class="nav-item"><a class="nav-link" href="#services">Serviços</a></li>
                 <li class="nav-item"><a class="nav-link" href="#portfolio">Atendimentos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Contato</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= url('/entrar') ?>">Entrar</a></li>
             </ul>
         </div>
     </div>
@@ -178,7 +188,7 @@
         <a class="btn btn-light btn-xl" href="#contact">Solicitar Orçamento!</a>
     </div>
 </section>
-<!-- Contact-->
+
 <section class="page-section" id="contact">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -186,79 +196,49 @@
                 <h2 class="mt-0">Entre em Contato!</h2>
                 <hr class="divider"/>
                 <p class="text-muted mb-5">Precisa de mais informações sobre o sistema ou deseja solicitar uma
-                    demonstração?
-                    Envie sua mensagem e nossa equipe retornará o mais breve possível!</p>
+                    demonstração? Envie sua mensagem e nossa equipe retornará o mais breve possível!</p>
             </div>
         </div>
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
             <div class="col-lg-6">
-                <!-- * * * * * * * * * * * * * * *-->
-                <!-- * * SB Forms Contact Form * *-->
-                <!-- * * * * * * * * * * * * * * *-->
-                <!-- This form is pre-integrated with SB Forms.-->
-                <!-- To make this form functional, sign up at-->
-                <!-- https://startbootstrap.com/solution/contact-forms-->
-                <!-- to get an API token!-->
-                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
-                    <!-- Name input-->
+
+                <form action="<?= url('/contato') ?>" method="post">
+
+
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="name" type="text" placeholder="Informe seu nome..."
-                               data-sb-validations="required"/>
+                        <input class="form-control" id="name" name="name" type="text"
+                               placeholder="Informe seu nome completo..." required/>
                         <label for="name">Nome Completo</label>
-                        <div class="invalid-feedback" data-sb-feedback="name:required">O nome é obrigatório</div>
                     </div>
-                    <!-- Email address input-->
+
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="email" type="email" placeholder="seumelhoremail@email.com"
-                               data-sb-validations="required,email"/>
+                        <input class="form-control" id="email" name="email" type="email"
+                               placeholder="seumelhoremail@email.com" required/>
                         <label for="email">Email</label>
-                        <div class="invalid-feedback" data-sb-feedback="email:required">O e-mail é obrigatório.</div>
-                        <div class="invalid-feedback" data-sb-feedback="email:email">O e-mail não é válido.</div>
                     </div>
-                    <!-- Phone number input-->
+
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="phone" type="tel" placeholder="(99) 99456-7890"
-                               data-sb-validations="required"/>
-                        <label for="phone">Telefone</label>
-                        <div class="invalid-feedback" data-sb-feedback="phone:required">O número de telefone é
-                            obrigatório.
-                        </div>
+                        <input class="form-control" id="phone" name="phone" type="tel"
+                               placeholder="(99) 99456-7890" required/>
+                        <label for="phone">Telefone/WhatsApp</label>
                     </div>
-                    <!-- Message input-->
+
                     <div class="form-floating mb-3">
-                        <textarea class="form-control" id="message" type="text"
+                        <textarea class="form-control" id="message" name="message"
                                   placeholder="Nos conte um pouco sobre o seu negócio..."
-                                  style="height: 10rem" data-sb-validations="required"></textarea>
+                                  style="height: 10rem" required></textarea>
                         <label for="message">Mensagem</label>
-                        <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
                     </div>
-                    <!-- Submit success message-->
-                    <!---->
-                    <!-- This is what your users will see when the form-->
-                    <!-- has successfully submitted-->
-                    <div class="d-none" id="submitSuccessMessage">
-                        <div class="text-center mb-3">
-                            <div class="fw-bolder">Formulário enviado com sucesso!</div>
-                            Em breve entraremos em contato
-                        </div>
-                    </div>
-                    <!-- Submit error message-->
-                    <!---->
-                    <!-- This is what your users will see when there is-->
-                    <!-- an error submitting the form-->
-                    <div class="d-none" id="submitErrorMessage">
-                        <div class="text-center text-danger mb-3">Ops! Erro ao enviar formulário.</div>
-                    </div>
-                    <!-- Submit Button-->
+
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Enviar</button>
+                        <button class="btn btn-primary btn-xl" type="submit">Enviar Mensagem</button>
                     </div>
                 </form>
             </div>
         </div>
-
     </div>
 </section>
+
 <!-- Footer-->
 <footer class="bg-light py-5">
     <div class="container px-4 px-lg-5">

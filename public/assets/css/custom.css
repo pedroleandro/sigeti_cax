@@ -1,0 +1,70 @@
+/* ==============================================
+   SIGETI CAX — Custom Theme Override
+   Sobrescreve o styles-creative.css
+   ============================================== */
+
+/* Variáveis — cor primária de laranja para azul institucional */
+:root {
+    --bs-primary: #1a56db;
+    --bs-primary-rgb: 26, 86, 219;
+    --bs-link-color: #1a56db;
+    --bs-link-hover-color: #1448b8;
+}
+
+/* Divisor */
+hr.divider {
+    background-color: #1a56db;
+}
+
+/* Botão primário */
+.btn-primary {
+    --bs-btn-bg: #1a56db;
+    --bs-btn-border-color: #1a56db;
+    --bs-btn-hover-bg: #1448b8;
+    --bs-btn-hover-border-color: #1240a8;
+    --bs-btn-active-bg: #1240a8;
+    --bs-btn-active-border-color: #1240a8;
+}
+
+/* Navbar — links hover e ativo */
+#mainNav .navbar-nav .nav-item .nav-link:hover,
+#mainNav .navbar-nav .nav-item .nav-link:active,
+#mainNav .navbar-nav .nav-item .nav-link.active {
+    color: #1a56db !important;
+}
+
+#mainNav.navbar-shrink .navbar-brand:hover,
+#mainNav.navbar-shrink .navbar-nav .nav-item .nav-link:hover {
+    color: #1a56db;
+}
+
+/* Seção about (bg-primary) */
+.bg-primary {
+    background-color: #1a56db !important;
+}
+
+/* Portfolio — overlay hover */
+#portfolio .portfolio-box .portfolio-box-caption {
+    background: rgba(26, 86, 219, 0.9);
+}
+
+/* Focus dos campos do formulário */
+.form-control:focus {
+    border-color: #6b9eff;
+    box-shadow: 0 0 0 0.25rem rgba(26, 86, 219, 0.25);
+}
+
+.form-select:focus {
+    border-color: #6b9eff;
+    box-shadow: 0 0 0 0.25rem rgba(26, 86, 219, 0.25);
+}
+
+.form-check-input:focus {
+    border-color: #6b9eff;
+    box-shadow: 0 0 0 0.25rem rgba(26, 86, 219, 0.25);
+}
+
+.btn:focus-visible,
+.btn-primary:focus-visible {
+    box-shadow: 0 0 0 0.25rem rgba(26, 86, 219, 0.25);
+}
