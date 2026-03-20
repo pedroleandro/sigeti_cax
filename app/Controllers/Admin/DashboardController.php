@@ -54,10 +54,6 @@ class DashboardController extends Controller
             $paginator->offset()
         );
 
-        if ((new Session())->has("auth")) {
-            $user = (new Session())->auth;
-        }
-
         $year = 2024;
         $months = array_fill(1, 12, 0);
 
@@ -77,7 +73,6 @@ class DashboardController extends Controller
             "title" => "Dashboard | " . APP_NAME,
             "counts" => $counts,
             "tickets" => $tickets,
-            "user" => $user ?? [],
             "paginator" => $paginator,
             "year" => $year,
             "monthlyData" => $monthlyData,

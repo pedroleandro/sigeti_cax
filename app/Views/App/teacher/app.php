@@ -111,7 +111,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user->name ?? "João Pedro" ?></span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= (new \App\Core\Session())->auth->name ?? "João Pedro" ?></span>
                             <img class="img-profile rounded-circle"
                                  src="<?= assets_sb_admin('/img/undraw_profile.svg') ?>">
                         </a>

@@ -1,6 +1,5 @@
 <?php $this->layout('admin/app', [
-        'title' => $title,
-        'user' => $user
+        'title' => $title
 ]) ?>
 
 <div class="container-fluid">

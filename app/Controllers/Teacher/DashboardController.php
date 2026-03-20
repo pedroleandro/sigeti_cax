@@ -61,15 +61,10 @@ class DashboardController extends Controller
             $paginator->offset()
         );
 
-        if ((new Session())->has("auth")) {
-            $user = (new Session())->auth;
-        }
-
         echo $this->view->render("teacher/dashboard", [
             "title" => "Dashboard | " . APP_NAME,
             "counts" => $counts,
             "tickets" => $tickets,
-            "user" => $user ?? [],
             "paginator" => $paginator,
         ]);
     }
