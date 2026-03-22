@@ -99,7 +99,7 @@
             </nav>
 
             <span class="tb-divider" aria-hidden="true"></span>
-            <a href="<?= url('/login') ?>" class="tb-login">Entrar</a>
+            <a href="<?= url('/entrar') ?>" target="_blank" class="tb-login">Entrar</a>
 
         </div>
     </div>
@@ -282,6 +282,10 @@
                        rel="noopener noreferrer" aria-label="WhatsApp">
                         <i class="bi bi-whatsapp"></i>
                     </a>
+                    <a href="mailto:contato@sigeti.com.br" class="ft-mini ft-mi-wa"
+                       rel="noopener noreferrer" aria-label="WhatsApp">
+                        <i class="bi bi-envelope"></i>
+                    </a>
                     <a href="https://instagram.com/sigeti" class="ft-mini ft-mi-ig" target="_blank"
                        rel="noopener noreferrer" aria-label="Instagram">
                         <i class="bi bi-instagram"></i>
@@ -289,10 +293,6 @@
                     <a href="https://linkedin.com/company/sigeti" class="ft-mini ft-mi-li" target="_blank"
                        rel="noopener noreferrer" aria-label="LinkedIn">
                         <i class="bi bi-linkedin"></i>
-                    </a>
-                    <a href="https://facebook.com/sigeti" class="ft-mini ft-mi-fb" target="_blank"
-                       rel="noopener noreferrer" aria-label="Facebook">
-                        <i class="bi bi-facebook"></i>
                     </a>
                 </nav>
 
