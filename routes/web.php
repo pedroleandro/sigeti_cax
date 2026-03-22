@@ -101,6 +101,14 @@ $router->get('/chamados', 'Teacher\\TicketController@index');
 $router->get('/chamados/cadastrar', 'Teacher\\TicketController@create');
 $router->post('/chamados/store', 'Teacher\\TicketController@store');
 
+/*
+|--------------------------------------------------------------------------
+| Routes Error
+|--------------------------------------------------------------------------
+*/
+
+$router->group("/error");
+$router->get("/{errcode}", 'ErrorController@index');
 
 /*
 |--------------------------------------------------------------------------
@@ -117,5 +125,5 @@ $router->dispatch();
 */
 
 if ($router->error()) {
-    echo "Erro: " . $router->error();
+    redirect("/error/{$router->error()}");
 }
