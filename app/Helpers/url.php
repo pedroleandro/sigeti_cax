@@ -38,3 +38,14 @@ function assets_sb_admin(string $path = null): string
 
     return $base;
 }
+
+function assets_flex_start(string $path = null): string
+{
+    $base = APP_URL . "/resources/themes/FlexStart-1.0.0";
+
+    if ($path) {
+        return $base . '/' . ltrim($path, '/');
+    }
+
+    return $base;
+}

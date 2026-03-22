@@ -68,3 +68,508 @@ hr.divider {
 .btn-primary:focus-visible {
     box-shadow: 0 0 0 0.25rem rgba(26, 86, 219, 0.25);
 }
+
+/* ════════════════════════════════════════════════
+   SIGETI — FOOTER
+   Cole este bloco no final do seu custom.css
+   Usa Bootstrap Icons (bi bi-*) que o template
+   FlexStart já carrega — sem dependência extra.
+════════════════════════════════════════════════ */
+
+/* ── Variáveis locais (mesmas do topbar) ── */
+:root {
+    --ft-bg: #05111f; /* fundo escuro */
+    --ft-bg-2: #071828; /* fundo bottom */
+    --ft-border: rgba(255, 255, 255, .07);
+    --ft-text: rgba(255, 255, 255, .28);
+    --ft-text-2: rgba(255, 255, 255, .16);
+    --ft-white: rgba(255, 255, 255, .82);
+    --ft-cy: #00b2a2;
+    --ft-cy-h: #00c9b8;
+    --ft-ease: .2s ease;
+    /* Redes */
+    --wa: #25D366;
+    --ig-a: #f09433;
+    --ig-b: #bc1888;
+    --li: #0A66C2;
+    --fb: #1877F2;
+    --em: #008a7d;
+}
+
+/* ══ ESTRUTURA GERAL ══ */
+#footer.footer {
+    background: var(--ft-bg);
+    font-family: 'Poppins', sans-serif;
+    color: var(--ft-text);
+    margin-top: 0;
+}
+
+/* ══ FAIXA PRINCIPAL ══ */
+.footer-main {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(36px, 5vw, 56px);
+    border-bottom: 1px solid var(--ft-border);
+}
+
+/* ── Brand / logo ── */
+.ft-brand {
+    text-decoration: none;
+}
+
+.ft-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: #0e2540;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.ft-logo-icon::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 178, 162, .2);
+}
+
+.ft-logo-icon span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -.5px;
+}
+
+.ft-logo-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ft-white);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+}
+
+.ft-logo-sub {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ft-cy);
+}
+
+.ft-desc {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ft-text);
+    max-width: 340px;
+    margin-bottom: 18px;
+}
+
+/* ── Lista de contatos ── */
+.ft-contacts {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.ft-contacts li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--ft-text);
+}
+
+.ft-contacts li i {
+    color: var(--ft-cy);
+    font-size: 13px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.ft-contacts li a {
+    color: var(--ft-text);
+    text-decoration: none;
+    transition: color var(--ft-ease);
+}
+
+.ft-contacts li a:hover {
+    color: var(--ft-cy);
+}
+
+/* ── Botões sociais com label ── */
+.ft-socs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 4px;
+}
+
+.ft-sb {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px 5px 9px;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid var(--ft-border);
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ft-text);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color var(--ft-ease), border-color var(--ft-ease);
+}
+
+.ft-sb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--ft-ease);
+}
+
+.ft-sb i {
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+    transition: color var(--ft-ease);
+}
+
+.ft-sb span {
+    position: relative;
+    z-index: 1;
+}
+
+.ft-sb:hover {
+    border-color: transparent;
+    color: #fff;
+}
+
+.ft-sb:hover::before {
+    opacity: 1;
+}
+
+/* Cores */
+.ft-sb-wa::before {
+    background: var(--wa);
+}
+
+.ft-sb-em::before {
+    background: var(--em);
+}
+
+.ft-sb-ig::before {
+    background: linear-gradient(135deg, var(--ig-a), var(--ig-b));
+}
+
+.ft-sb-li::before {
+    background: var(--li);
+}
+
+.ft-sb-fb::before {
+    background: var(--fb);
+}
+
+/* ── Colunas de links ── */
+.ft-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .38);
+    margin-bottom: 16px;
+}
+
+.ft-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ft-links li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.ft-links li::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .1);
+    flex-shrink: 0;
+    transition: background var(--ft-ease);
+}
+
+.ft-links li:hover::before {
+    background: var(--ft-cy);
+}
+
+.ft-links a {
+    font-size: 13.5px;
+    color: var(--ft-text);
+    text-decoration: none;
+    transition: color var(--ft-ease);
+}
+
+.ft-links a:hover {
+    color: rgba(255, 255, 255, .72);
+}
+
+/* ── Newsletter ── */
+.ft-nl-desc {
+    font-size: 13px;
+    color: var(--ft-text);
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.ft-nl-form {
+    display: flex;
+    gap: 0;
+    margin-bottom: 8px;
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1px solid var(--ft-border);
+    transition: border-color var(--ft-ease);
+}
+
+.ft-nl-form:focus-within {
+    border-color: rgba(0, 178, 162, .45);
+}
+
+.ft-nl-in {
+    flex: 1;
+    min-width: 0;
+    background: rgba(255, 255, 255, .04);
+    border: none;
+    outline: none;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .72);
+    font-family: 'Poppins', sans-serif;
+}
+
+.ft-nl-in::placeholder {
+    color: rgba(255, 255, 255, .18);
+}
+
+.ft-nl-btn {
+    background: var(--ft-cy);
+    border: none;
+    padding: 10px 16px;
+    color: #05111f;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background var(--ft-ease);
+    display: flex;
+    align-items: center;
+}
+
+.ft-nl-btn:hover {
+    background: var(--ft-cy-h);
+}
+
+.ft-nl-note {
+    font-size: 11.5px;
+    color: var(--ft-text-2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.ft-nl-note i {
+    color: rgba(255, 255, 255, .18);
+    font-size: 11px;
+}
+
+/* ── Status ── */
+.ft-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid var(--ft-border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, .28);
+}
+
+.ft-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+    animation: ftPulse 3s ease-in-out infinite;
+}
+
+@keyframes ftPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: .35;
+        transform: scale(.6);
+    }
+}
+
+/* ══ FAIXA BOTTOM ══ */
+.footer-bottom {
+    background: var(--ft-bg-2);
+    padding: 16px 0;
+}
+
+.ft-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ft-copy {
+    font-size: 12px;
+    color: var(--ft-text-2);
+    margin: 0;
+}
+
+.ft-copy strong {
+    color: rgba(255, 255, 255, .3);
+}
+
+.ft-legal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ft-legal a {
+    font-size: 12px;
+    color: var(--ft-text-2);
+    text-decoration: none;
+    transition: color var(--ft-ease);
+}
+
+.ft-legal a:hover {
+    color: rgba(255, 255, 255, .5);
+}
+
+.ft-legal span {
+    color: var(--ft-text-2);
+    font-size: 10px;
+}
+
+/* ── Mini ícones ── */
+.ft-minis {
+    display: flex;
+    gap: 4px;
+}
+
+.ft-mini {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid var(--ft-border);
+    color: rgba(255, 255, 255, .2);
+    font-size: 12px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color var(--ft-ease), border-color var(--ft-ease);
+}
+
+.ft-mini::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--ft-ease);
+}
+
+.ft-mini i {
+    position: relative;
+    z-index: 1;
+}
+
+.ft-mini:hover {
+    color: #fff;
+    border-color: transparent;
+}
+
+.ft-mini:hover::before {
+    opacity: 1;
+}
+
+.ft-mi-wa::before {
+    background: var(--wa);
+}
+
+.ft-mi-ig::before {
+    background: linear-gradient(135deg, var(--ig-a), var(--ig-b));
+}
+
+.ft-mi-li::before {
+    background: var(--li);
+}
+
+.ft-mi-fb::before {
+    background: var(--fb);
+}
+
+/* ══ RESPONSIVO ══ */
+@media (max-width: 991px) {
+    .ft-desc {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .ft-bottom-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .ft-legal {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .ft-socs {
+        gap: 4px;
+    }
+
+    .ft-sb span {
+        display: none;
+    }
+
+    /* vira só ícone no celular */
+    .ft-sb {
+        padding: 6px 10px;
+    }
+}
