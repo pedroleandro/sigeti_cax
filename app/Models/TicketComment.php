@@ -17,9 +17,9 @@ class TicketComment extends AbstractModel
     ];
 
     protected array $required = [
-        "ticket_id" => "O chamado é obrigatório.",
-        "user_id"   => "O usuário é obrigatório.",
-        "comment"   => "O comentário é obrigatório."
+        "ticket_id" => "O campo CHAMADO é obrigatório.",
+        "user_id" => "O campo USUÁRIO é obrigatório.",
+        "comment" => "O campo COMENTÁRIO é obrigatório."
     ];
 
     protected bool $timestamps = false;
