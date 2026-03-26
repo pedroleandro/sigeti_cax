@@ -373,7 +373,7 @@
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up">
                     <div class="team-member">
                         <div class="member-img">
-                            <img src="<?= assets_flex_start('/assets/img/team/team-1.jpg') ?>" class="img-fluid"
+                            <img src="<?= assets_flex_start('/assets/img/team/nayra.jpeg') ?>" class="img-fluid"
                                  alt="">
                             <div class="social">
                                 <a href=""><i class="bi bi-whatsapp"></i></a>
@@ -388,28 +388,10 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                    <div class="team-member">
-                        <div class="member-img">
-                            <img src="<?= assets_flex_start('/assets/img/team/team-2.jpg') ?>" class="img-fluid"
-                                 alt="">
-                            <div class="social">
-                                <a href=""><i class="bi bi-whatsapp"></i></a>
-                                <a href=""><i class="bi bi-instagram"></i></a>
-                                <a href=""><i class="bi bi-linkedin"></i></a>
-                            </div>
-                        </div>
-                        <div class="member-info text-center">
-                            <h4>Nayla Gabriela</h4>
-                            <span>Desenvolvedora</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
                     <div class="team-member">
                         <div class="member-img">
-                            <img src="<?= assets_flex_start('/assets/img/team/team-3.jpg') ?>" class="img-fluid"
+                            <img src="<?= assets_flex_start('/assets/img/team/jp.jpeg') ?>" class="img-fluid"
                                  alt="">
                             <div class="social">
                                 <a href=""><i class="bi bi-whatsapp"></i></a>
@@ -424,14 +406,10 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="row gy-4 justify-content-center mt-4">
-
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up">
                     <div class="team-member">
                         <div class="member-img">
-                            <img src="<?= assets_flex_start('/assets/img/team/team-4.jpg') ?>" class="img-fluid"
+                            <img src="<?= assets_flex_start('/assets/img/team/elcio.jpeg') ?>" class="img-fluid"
                                  alt="">
                             <div class="social">
                                 <a href=""><i class="bi bi-whatsapp"></i></a>
@@ -446,10 +424,32 @@
                     </div>
                 </div>
 
+            </div>
+
+            <div class="row gy-4 justify-content-center mt-4">
+
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                     <div class="team-member">
                         <div class="member-img">
-                            <img src="<?= assets_flex_start('/assets/img/team/team-1.jpg') ?>" class="img-fluid"
+                            <img src="<?= assets_flex_start('/assets/img/team/nayla.jpeg') ?>" class="img-fluid"
+                                 alt="">
+                            <div class="social">
+                                <a href=""><i class="bi bi-whatsapp"></i></a>
+                                <a href=""><i class="bi bi-instagram"></i></a>
+                                <a href=""><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                        <div class="member-info text-center">
+                            <h4>Nayla Gabriela</h4>
+                            <span>Desenvolvedora</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-member">
+                        <div class="member-img">
+                            <img src="<?= assets_flex_start('/assets/img/team/francisco.jpeg') ?>" class="img-fluid"
                                  alt="">
                             <div class="social">
                                 <a href=""><i class="bi bi-whatsapp"></i></a>
@@ -467,7 +467,7 @@
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
                     <div class="team-member">
                         <div class="member-img">
-                            <img src="<?= assets_flex_start('/assets/img/team/team-2.jpg') ?>" class="img-fluid"
+                            <img src="<?= assets_flex_start('/assets/img/team/ezequiel.jpeg') ?>" class="img-fluid"
                                  alt="">
                             <div class="social">
                                 <a href=""><i class="bi bi-whatsapp"></i></a>
@@ -501,7 +501,7 @@
         <p>Fale com a equipe do SIGETI</p>
     </div><!-- End Section Title -->
 
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="container" style="margin-bottom: 100px" data-aos="fade-up" data-aos-delay="100">
 
         <div class="row gy-4">
 

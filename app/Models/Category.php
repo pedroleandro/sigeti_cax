@@ -17,11 +17,16 @@ class Category extends AbstractModel
     ];
 
     protected array $required = [
-        "name" => "O nome é obrigatório",
-        "description" => "A descrição é obrigatória"
+        "name" => "O campo NOME é obrigatório.",
+        "description" => "O campo DESCRIÇÃO é obrigatório."
     ];
 
     protected bool $timestamps = true;
+
+    public function getId(): ?int
+    {
+        return $this->attributes["id"];
+    }
 
     public function setName(string $name): void
     {
@@ -32,6 +37,11 @@ class Category extends AbstractModel
         $this->attributes["name"] = $name;
     }
 
+    public function getName(): ?string
+    {
+        return $this->attributes["name"] ?? null;
+    }
+
     public function setDescription(string $description): void
     {
         $description = trim(strip_tags($description));
@@ -39,16 +49,6 @@ class Category extends AbstractModel
             throw new InvalidArgumentException("A descrição deve ter pelo menos 20 caracteres.");
         }
         $this->attributes["description"] = $description;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->attributes["id"] ?? null;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->attributes["name"] ?? null;
     }
 
     public function getDescription(): ?string

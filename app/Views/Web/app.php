@@ -263,7 +263,6 @@
 
 <script>
     (function () {
-        /* ── Topbar hide on scroll ── */
         const topbar = document.getElementById('sigeti-topbar');
         const header = document.getElementById('header');
 
@@ -275,7 +274,6 @@
             }, {passive: true});
         }
 
-        /* ── Hamburger / drawer ── */
         const hbg = document.getElementById('sg-hbg');
         const drawer = document.getElementById('sg-drawer');
 
@@ -288,7 +286,6 @@
                 document.body.style.overflow = open ? 'hidden' : '';
             });
 
-            /* Fecha ao clicar em link do drawer */
             drawer.querySelectorAll('a').forEach(function (a) {
                 a.addEventListener('click', function () {
                     drawer.classList.remove('open');
@@ -299,7 +296,6 @@
                 });
             });
 
-            /* Fecha ao clicar fora */
             document.addEventListener('click', function (e) {
                 if (!header.contains(e.target)) {
                     drawer.classList.remove('open');
