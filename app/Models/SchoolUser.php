@@ -14,35 +14,34 @@ class SchoolUser extends AbstractModel
         "user_id",
         "shift"
     ];
+
     protected array $required = [
-        "school_id" => "A escola é obrigatória.",
-        "user_id" => "O usuário é obrigatório.",
-        "shift" => "O turno é obrigatório."
+        "school_id" => "O campo ESCOLA é obrigatório.",
+        "user_id" => "O campo USER é obrigatório.",
+        "shift" => "O campo TURNO é obrigatório.",
     ];
+
     protected bool $timestamps = false;
+
+    public const MORNING = "manha";
+    public const AFTERNOON = "tarde";
+
+    public const WHOLE = "integral";
+
+    private const SHIFTS = [
+        self::MORNING,
+        self::AFTERNOON,
+        self::WHOLE
+    ];
+
+    public function getId(): ?int
+    {
+        return $this->attributes["id"];
+    }
 
     public function setSchoolId(int $schoolId): void
     {
         $this->attributes["school_id"] = $schoolId;
-    }
-
-    public function setUserId(int $userId): void
-    {
-        $this->attributes["user_id"] = $userId;
-    }
-
-    public function setShift(string $shift): void
-    {
-        $shifts = ["manha", "tarde", "integral"];
-        if (!in_array($shift, $shifts)) {
-            throw new InvalidArgumentException("Turno inválido. Use: manha, tarde ou integral.");
-        }
-        $this->attributes["shift"] = $shift;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->attributes["id"] ?? null;
     }
 
     public function getSchoolId(): ?int
@@ -50,9 +49,25 @@ class SchoolUser extends AbstractModel
         return $this->attributes["school_id"] ?? null;
     }
 
+    public function setUserId(int $userId): void
+    {
+        $this->attributes["user_id"] = $userId;
+    }
+
     public function getUserId(): ?int
     {
         return $this->attributes["user_id"] ?? null;
+    }
+
+    public function setShift(?string $shift): void
+    {
+        $shift = $shift ?? self::WHOLE;
+        if (!in_array($shift, self::SHIFTS)) {
+            throw new \InvalidArgumentException("O Turno é inválido.");
+        }
+
+        $this->attributes["shift"] = $shift;
+
     }
 
     public function getShift(): ?string
