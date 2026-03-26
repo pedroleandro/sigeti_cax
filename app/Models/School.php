@@ -8,18 +8,27 @@ use InvalidArgumentException;
 class School extends AbstractModel
 {
     protected string $table = "schools";
+
     protected string $primaryKey = "id";
+
     protected array $fillable = [
         "name",
         "code",
         "address"
     ];
+
     protected array $required = [
-        "name" => "O nome é obrigatorio",
-        "code" => "O código é obrigatorio",
-        "address" => "O endereço é obrigatorio"
+        "name" => "O campo NOME é obrigatório.",
+        "code" => "O campo CÓDIGO é obrigatório.",
+        "address" => "O campo ENDEREÇO é obrigatório."
     ];
+
     protected bool $timestamps = true;
+
+    public function getId(): ?int
+    {
+        return $this->attributes["id"];
+    }
 
     public function setName(string $name): void
     {
@@ -28,6 +37,11 @@ class School extends AbstractModel
             throw new InvalidArgumentException("O nome da escola deve ter pelo menos 15 caracteres.");
         }
         $this->attributes["name"] = $name;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->attributes["name"] ?? null;
     }
 
     public function setCode(string $code): void
@@ -39,6 +53,11 @@ class School extends AbstractModel
         $this->attributes["code"] = $code;
     }
 
+    public function getCode(): ?string
+    {
+        return $this->attributes["code"] ?? null;
+    }
+
     public function setAddress(string $address): void
     {
         $address = trim(strip_tags($address));
@@ -48,24 +67,14 @@ class School extends AbstractModel
         $this->attributes["address"] = $address;
     }
 
-    public function getId(): ?int
-    {
-        return $this->attributes["id"] ?? null;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->attributes["name"] ?? null;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->attributes["code"] ?? null;
-    }
-
     public function getAddress(): ?string
     {
         return $this->attributes["address"] ?? null;
+    }
+
+    public function findByCode(string $code): ?self
+    {
+        return (new static())->where("code", "=", $code)->first();
     }
 
     public function users(): array
