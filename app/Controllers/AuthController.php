@@ -18,13 +18,16 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
 
-            if (Auth::role() === "tecnico") {
+            if (Auth::role() === User::TECHNICIAN) {
                 redirect("/admin/dashboard");
+                return;
             }
 
-            if (Auth::role() === "professor") {
+            if (Auth::role() === User::TEACHER) {
                 redirect("/professor/dashboard");
+                return;
             }
+
         }
 
         echo $this->view->render('auth/login', [
@@ -34,39 +37,29 @@ class AuthController extends Controller
 
     public function authenticate(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
+        $this->validateCsrfToken($data, "/entrar");
+
+        if (empty($data['email']) || empty($data['password'])) {
+            flash("warning", "Os campos EMAIL e SENHA são obrigatorios.");
             redirect("/entrar");
             return;
         }
 
-        if (empty($data["email"]) || empty($data["password"])) {
-            flash("error", "Informe email e senha.");
+        $user = User::findByEmail($data['email']);
+
+        if (!$user || !$user->passwordVerify($data['password'])) {
+            flash("warning","Credenciais inválidas.");
             redirect("/entrar");
             return;
         }
 
-        $user = User::findByEmail($data["email"]);
-
-        if(!$user){
-            flash("warning", "E-mail não cadastrado!");
-            redirect("/entrar");
-        }
-
-        if ($user->getStatus() === "inativo") {
-            flash("warning", "Usuário inativo! Contate o administrador.");
-            redirect("/entrar");
-            return;
-        }
-
-        if (!$user || !$user->verifyPassword($data["password"])) {
-            flash("error", "Email ou senha inválidos.");
+        if ($user->getStatus() === User::INACTIVE) {
+            flash("error","Usuário está INATIVO. Contate o administrador.");
             redirect("/entrar");
             return;
         }
 
         $session = new Session();
-
         $session->set("auth", [
             "id" => $user->getId(),
             "name" => $user->getName(),
@@ -79,20 +72,21 @@ class AuthController extends Controller
         $user->setLastLoginAt();
         $user->save();
 
-        if ($user->getRole() === "tecnico") {
-            flash("success", "Bem-vindo, {$user->getName()}!");
+        if ($user->getRole() === User::TECHNICIAN) {
+            flash("success","Bem-vindo(a), " . $user->getName());
             redirect("/admin/dashboard");
             return;
         }
 
-        if ($user->getRole() === "professor") {
-            flash("success", "Bem-vindo, Professor(a) {$user->getName()}!");
+        if ($user->getRole() === User::TEACHER) {
+            flash("success","Bem-vindo(a), Professor(a) " . $user->getName());
             redirect("/professor/dashboard");
             return;
         }
 
+        $session->destroy();
+        flash("error","Perfil de acesso não reconhecido.");
         redirect("/entrar");
-        return;
     }
 
     public function logout(?array $data): void
@@ -139,16 +133,12 @@ class AuthController extends Controller
 
     public function store(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/entrar");
-            return;
-        }
+        $this->validateCsrfToken($data, "/registrar");
 
         $required = [
-            "name" => "O nome é obrigatório.",
-            "email" => "O email é obrigatório.",
-            "password" => "A senha é obrigatória."
+            "name" => "O campo NOME é obrigatorio.",
+            "email" => "O campo EMAIL é obrigatorio.",
+            "password" => "O campo SENHA é obrigatorio.",
         ];
 
         $errors = [];
@@ -178,8 +168,8 @@ class AuthController extends Controller
                 "name" => $data["name"],
                 "email" => $data["email"],
                 "password" => $data["password"],
-                "role" => "professor",
-                "status" => "registrado"
+                "role" => User::TEACHER,
+                "status" => User::REGISTERED
             ]);
 
             $user->save();

@@ -144,9 +144,9 @@ class User extends AbstractModel
         return $this->attributes["last_login_at"] ?? null;
     }
 
-    public function verifyPassword(string $password): bool
+    public function passwordVerify(string $password): bool
     {
-        return password_verify($password, $this->attributes["password"] ?? "");
+        return password_verify($password, $this->attributes["password"] ?? null);
     }
 
     public static function findByEmail(string $email): ?self

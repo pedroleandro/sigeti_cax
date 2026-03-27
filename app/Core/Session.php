@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Core;
 
 class Session
@@ -8,21 +7,28 @@ class Session
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_save_path(__DIR__ . "/../../storage/sessions");
+
+            session_set_cookie_params([
+                'lifetime' => 0,
+                'path'     => '/',
+                'domain'   => '',
+                'secure'   => false, // mude para true em produção com HTTPS
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]);
+
             session_start();
         }
     }
 
-    public function __set(string $name, $value)
+    public function __set(string $name, $value): void
     {
         $_SESSION[$name] = $value;
     }
 
     public function __get(string $name)
     {
-        if (empty($_SESSION[$name])) {
-            return null;
-        }
-        return $_SESSION[$name];
+        return $_SESSION[$name] ?? null;
     }
 
     public function __isset(string $name): bool
@@ -33,6 +39,11 @@ class Session
     public function all(): ?object
     {
         return (object)$_SESSION;
+    }
+
+    public function get(string $key): mixed
+    {
+        return isset($_SESSION[$key]) ? (object)$_SESSION[$key] : null;
     }
 
     public function set(string $key, mixed $value): self
@@ -58,8 +69,23 @@ class Session
         return $this;
     }
 
-    public function destroy()
+    public function destroy(): self
     {
+        $_SESSION = [];
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+
         session_destroy();
         return $this;
     }
