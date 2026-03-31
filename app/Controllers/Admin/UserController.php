@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers\Admin;
 
 use App\Core\Auth;
@@ -25,7 +26,11 @@ class UserController extends Controller
         $userModel = new User();
         $total = $userModel->count();
 
-        $paginator = new Paginator(url("/admin/usuarios/"), "Página");
+        $paginator = new Paginator(
+            url("/admin/usuarios/"),
+            "Página"
+        );
+
         $paginator->pager($total, $limit, $page);
 
         $users = $userModel
@@ -35,8 +40,8 @@ class UserController extends Controller
             ->get();
 
         echo $this->view->render('/admin/user/index', [
-            "title"     => "Usuários Cadastrados | " . APP_NAME,
-            "users"     => $users,
+            "title" => "Usuários Cadastrados | " . APP_NAME,
+            "users" => $users,
             "paginator" => $paginator
         ]);
     }
@@ -46,18 +51,14 @@ class UserController extends Controller
         $schools = School::all();
 
         echo $this->view->render('/admin/user/create', [
-            "title"   => "Cadastrar Novo Usuário | " . APP_NAME,
+            "title" => "Cadastrar Novo Usuário | " . APP_NAME,
             "schools" => $schools
         ]);
     }
 
     public function store(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/usuarios/cadastrar");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/usuarios/cadastrar");
 
         $user = new User();
         $errors = $user->validate($data);
@@ -74,10 +75,12 @@ class UserController extends Controller
             return;
         }
 
-        $role = $data["role"] ?? "professor";
+        $role = $data["role"] ?? User::TEACHER;
 
-        if ($role === "professor") {
+        if ($role === User::TEACHER) {
+
             $linkErrors = SchoolUser::validateLinks($data["schools"] ?? []);
+
             if ($linkErrors) {
                 flash("error", implode("<br>", $linkErrors));
                 redirect("/admin/usuarios/cadastrar");
@@ -86,14 +89,16 @@ class UserController extends Controller
         }
 
         try {
+
             $user->fill([
-                "name"     => $data["name"],
-                "email"    => $data["email"],
+                "name" => $data["name"],
+                "email" => $data["email"],
                 "password" => $data["password"],
                 "document" => $data["document"] ?? null,
-                "role"     => $role,
-                "status"   => $data["status"] ?? "registrado"
+                "role" => $role,
+                "status" => $data["status"] ?? "registrado"
             ]);
+
             $user->save();
 
             if ($user->getRole() === "professor") {
@@ -101,9 +106,11 @@ class UserController extends Controller
             }
 
         } catch (\InvalidArgumentException $e) {
+
             flash("error", $e->getMessage());
             redirect("/admin/usuarios/cadastrar");
             return;
+
         }
 
         flash("success", "Usuário cadastrado com sucesso.");
@@ -112,14 +119,7 @@ class UserController extends Controller
 
     public function edit(?array $data): void
     {
-        $id = $data["id"] ?? null;
-
-        if (!$id) {
-            redirect("/admin/usuarios");
-            return;
-        }
-
-        $user = User::find($id);
+        $user = User::find($data['id']);
 
         if (!$user) {
             flash("error", "Usuário não encontrado.");
@@ -127,30 +127,20 @@ class UserController extends Controller
             return;
         }
 
-        $schools     = School::all();
+        $schools = School::all();
         $userSchools = $user->schools();
 
         echo $this->view->render("/admin/user/edit", [
-            "title"       => "Editar Usuário | " . APP_NAME,
-            "user"        => $user,
-            "schools"     => $schools,
+            "title" => "Editar Usuário | " . APP_NAME,
+            "user" => $user,
+            "schools" => $schools,
             "userSchools" => $userSchools
         ]);
     }
 
     public function update(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/usuarios");
-            return;
-        }
-
-        if (empty($data["id"])) {
-            flash("error", "Usuário inválido.");
-            redirect("/admin/usuarios");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/usuarios");
 
         $user = User::find($data["id"]);
 
@@ -161,6 +151,7 @@ class UserController extends Controller
         }
 
         $errors = $user->validate($data);
+
         if ($errors) {
             flash("error", implode("<br>", $errors));
             redirect("/admin/usuarios/editar/" . $user->getId());
@@ -168,6 +159,7 @@ class UserController extends Controller
         }
 
         $existing = User::findByEmail($data["email"]);
+
         if ($existing && $existing->getId() !== $user->getId()) {
             flash("warning", "Este email já está cadastrado.");
             redirect("/admin/usuarios/editar/" . $user->getId());
@@ -176,8 +168,10 @@ class UserController extends Controller
 
         $role = $data["role"] ?? $user->getRole();
 
-        if ($role === "professor") {
+        if ($role === User::TEACHER) {
+
             $linkErrors = SchoolUser::validateLinks($data["schools"] ?? []);
+
             if ($linkErrors) {
                 flash("error", implode("<br>", $linkErrors));
                 redirect("/admin/usuarios/editar/" . $user->getId());
@@ -186,75 +180,43 @@ class UserController extends Controller
         }
 
         try {
+
             $user->fill([
-                "name"     => $data["name"],
-                "email"    => $data["email"],
+                "name" => $data["name"],
+                "email" => $data["email"],
                 "password" => $data["password"] ?? null,
                 "document" => $data["document"] ?? null,
-                "role"     => $role,
-                "status"   => $data["status"]
+                "role" => $role,
+                "status" => $data["status"]
             ]);
+
             $user->save();
 
-            if ($user->getRole() === "professor") {
+            if ($user->getRole() === User::TEACHER) {
                 $this->syncSchoolLinks($user->getId(), $data["schools"] ?? []);
             } else {
                 $this->removeAllSchoolLinks($user->getId());
             }
 
         } catch (\InvalidArgumentException $e) {
+
             flash("error", $e->getMessage());
             redirect("/admin/usuarios/editar/" . $user->getId());
             return;
+
         }
 
         flash("success", "Usuário atualizado com sucesso.");
         redirect("/admin/usuarios/editar/" . $user->getId());
     }
 
-    public function delete(?array $data): void
-    {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/usuarios");
-            return;
-        }
-
-        $id = $data["id"] ?? null;
-
-        if (!$id) {
-            flash("error", "Usuário inválido.");
-            redirect("/admin/usuarios");
-            return;
-        }
-
-        $user = User::find($id);
-
-        if (!$user) {
-            flash("error", "Usuário não encontrado.");
-            redirect("/admin/usuarios");
-            return;
-        }
-
-        $user->delete();
-
-        flash("success", "Usuário removido com sucesso.");
-        redirect("/admin/usuarios");
-    }
-
-    public function requests(?array $data): void {}
-
-    public function technicians(?array $data): void {}
-
-    public function teachers(?array $data): void {}
-
     private function syncSchoolLinks(int $userId, array $schools): void
     {
         $this->removeAllSchoolLinks($userId);
 
         foreach ($schools as $entry) {
-            $schoolId = (int) ($entry["school_id"] ?? 0);
-            $shift    = $entry["shift"] ?? "integral";
+            $schoolId = (int)($entry["school_id"] ?? 0);
+            $shift = $entry["shift"] ?? "integral";
 
             if (!$schoolId) {
                 continue;
@@ -263,8 +225,8 @@ class UserController extends Controller
             $link = new SchoolUser();
             $link->fill([
                 "school_id" => $schoolId,
-                "user_id"   => $userId,
-                "shift"     => $shift
+                "user_id" => $userId,
+                "shift" => $shift
             ]);
             $link->save();
         }
