@@ -33,9 +33,11 @@ class School extends AbstractModel
     public function setName(string $name): void
     {
         $name = trim(strip_tags($name));
+
         if (strlen($name) < 15) {
             throw new InvalidArgumentException("O nome da escola deve ter pelo menos 15 caracteres.");
         }
+
         $this->attributes["name"] = $name;
     }
 
@@ -47,9 +49,11 @@ class School extends AbstractModel
     public function setCode(string $code): void
     {
         $code = trim($code);
+
         if (strlen($code) !== 8) {
             throw new InvalidArgumentException("O código da escola deve ter exatamente 8 caracteres.");
         }
+
         $this->attributes["code"] = $code;
     }
 
@@ -61,9 +65,11 @@ class School extends AbstractModel
     public function setAddress(string $address): void
     {
         $address = trim(strip_tags($address));
+
         if (strlen($address) < 20) {
             throw new InvalidArgumentException("O endereço da escola deve ter pelo menos 20 caracteres.");
         }
+
         $this->attributes["address"] = $address;
     }
 

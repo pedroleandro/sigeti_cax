@@ -152,6 +152,4 @@ class CategoryController extends Controller
             redirect('/admin/categorias/editar/' . $data['id']);
         }
     }
-
-
 }

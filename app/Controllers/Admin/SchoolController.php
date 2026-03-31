@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Models\School;
+use App\Models\User;
 use CoffeeCode\Paginator\Paginator;
 
 class SchoolController extends Controller
@@ -13,13 +14,12 @@ class SchoolController extends Controller
     {
         parent::__construct("App");
 
-        Auth::requireRole("tecnico");
+        Auth::requireRole(User::TECHNICIAN);
     }
 
     public function index(?array $data): void
     {
         $page = $data["page"] ?? 1;
-
         $limit = 10;
 
         $schoolModel = new School();
@@ -55,15 +55,10 @@ class SchoolController extends Controller
 
     public function store(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/escolas/cadastrar");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/escolas/cadastrar");
 
         $school = new School();
 
-        $data = filter_var_array($data, FILTER_SANITIZE_SPECIAL_CHARS);
         $errors = $school->validate($data);
 
         if ($errors) {
@@ -87,23 +82,16 @@ class SchoolController extends Controller
             flash("error", $exception->getMessage());
             redirect("/admin/escolas/cadastrar");
             return;
+
         }
 
         flash("success", "Escola cadastrada com sucesso.");
         redirect("/admin/escolas/editar/" . $school->getId());
-        return;
     }
 
     public function edit(?array $data): void
     {
-        $id = $data['id'] ?? null;
-
-        if (!$id) {
-            redirect('/admin/escolas');
-            return;
-        }
-
-        $school = School::find($id);
+        $school = School::find($data['id']);
 
         if (!$school) {
             flash('error', 'Escola não encontrada');
@@ -119,17 +107,7 @@ class SchoolController extends Controller
 
     public function update(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/escolas");
-            return;
-        }
-
-        if (empty($data["id"])) {
-            flash("error", "Escola inválida.");
-            redirect("/admin/escolas");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/escolas/editar/" . $data["id"]);
 
         $school = School::find($data["id"]);
 
@@ -162,10 +140,10 @@ class SchoolController extends Controller
             flash("error", $exception->getMessage());
             redirect("/admin/escolas/editar/" . $data["id"]);
             return;
+
         }
 
         flash("success", "Escola atualizada com sucesso.");
         redirect("/admin/escolas/editar/" . $school->getId());
-        return;
     }
 }
