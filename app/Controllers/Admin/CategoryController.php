@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use App\Core\Auth;
 use App\Core\Controller;
 use App\Models\Category;
-use App\Models\School;
+use App\Models\User;
 use CoffeeCode\Paginator\Paginator;
 
 class CategoryController extends Controller
@@ -14,13 +14,12 @@ class CategoryController extends Controller
     {
         parent::__construct("App");
 
-        Auth::requireRole("tecnico");
+        Auth::requireRole(User::TECHNICIAN);
     }
 
     public function index(?array $data): void
     {
         $page = $data["page"] ?? 1;
-
         $limit = 10;
 
         $categoryModel = new Category();
@@ -56,16 +55,11 @@ class CategoryController extends Controller
 
     public function store(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/categorias/cadastrar");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/categorias/cadastrar");
 
-        $category = new Category();
+        $newCategory = new Category();
 
-        $data = filter_var_array($data, FILTER_SANITIZE_SPECIAL_CHARS);
-        $errors = $category->validate($data);
+        $errors = $newCategory->validate($data);
 
         if ($errors) {
             flash("error", implode("<br>", $errors));
@@ -73,37 +67,36 @@ class CategoryController extends Controller
             return;
         }
 
-        try {
-
-            $category->fill([
-                "name" => $data["name"],
-                "description" => $data["description"]
-            ]);
-
-            $category->save();
-
-        } catch (\InvalidArgumentException $exception) {
-
-            flash("error", $exception->getMessage());
+        if ($newCategory->findByName($data["name"])) {
+            flash("warning", "Já existe uma categoria com esse mesmo nome.");
             redirect("/admin/categorias/cadastrar");
             return;
         }
 
+        try {
+
+            $newCategory->fill([
+                "name" => $data["name"],
+                "description" => $data["description"]
+            ]);
+
+            $newCategory->save();
+
+        } catch (\InvalidArgumentException $invalidArgumentException) {
+
+            flash("error", $invalidArgumentException->getMessage());
+            redirect("/admin/categorias/cadastrar");
+            return;
+
+        }
+
         flash("success", "Categoria cadastrada com sucesso.");
-        redirect("/admin/categorias/editar/" . $category->getId());
-        return;
+        redirect("/admin/categorias/editar/" . $newCategory->getId());
     }
 
     public function edit(?array $data): void
     {
-        $id = $data['id'] ?? null;
-
-        if (!$id) {
-            redirect('/admin/categorias');
-            return;
-        }
-
-        $category = Category::find($id);
+        $category = Category::find($data['id']);
 
         if (!$category) {
             flash('error', 'Categoria não encontrada');
@@ -119,21 +112,12 @@ class CategoryController extends Controller
 
     public function update(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/categorias");
-        }
-
-        if (empty($data["id"])) {
-            flash("error", "Categoria inválida.");
-            redirect("/admin/categorias");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/categorias/editar/" . $data["id"]);
 
         $category = Category::find((int)$data['id']);
 
         if (!$category) {
-            flash('error', 'Categoria não encontrada.');
+            flash('warning', 'Categoria não encontrada.');
             redirect('/admin/categorias');
             return;
         }
@@ -150,7 +134,7 @@ class CategoryController extends Controller
 
             $category->fill([
                 "name" => $data["name"],
-                "description" => $data["description"]
+                "description" => $data["description"] ?? null
             ]);
 
             if (!$category->save()) {
