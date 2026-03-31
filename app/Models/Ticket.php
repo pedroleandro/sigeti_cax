@@ -9,7 +9,9 @@ use PDO;
 class Ticket extends AbstractModel
 {
     protected string $table = "tickets";
+
     protected string $primaryKey = "id";
+
     protected array $fillable = [
         "title",
         "description",
@@ -36,11 +38,17 @@ class Ticket extends AbstractModel
     protected bool $timestamps = true;
 
     public const OPEN = "aberto";
+
     public const IN_PROGRESS = "em_andamento";
+
     public const WAITING = "aguardando";
+
     public const RESOLVED = "resolvido";
+
     public const FINISHED = "finalizado";
+
     public const ARCHIVED = "arquivado";
+
     private const STATUS = [
         self::OPEN,
         self::IN_PROGRESS,
@@ -51,7 +59,9 @@ class Ticket extends AbstractModel
     ];
 
     public const LOW = "baixa";
+
     public const MEAN = "media";
+
     public const HIGH = "alta";
 
     private const PRIORITIES = [
@@ -68,9 +78,11 @@ class Ticket extends AbstractModel
     public function setTitle(string $title): void
     {
         $title = trim(strip_tags($title));
+
         if (strlen($title) < 10) {
             throw new InvalidArgumentException("O título deve ter pelo menos 10 caracteres.");
         }
+
         $this->attributes["title"] = $title;
     }
 
@@ -82,9 +94,11 @@ class Ticket extends AbstractModel
     public function setDescription(string $description): void
     {
         $description = trim(strip_tags($description));
+
         if (strlen($description) < 30) {
             throw new InvalidArgumentException("A descrição deve ter pelo menos 30 caracteres.");
         }
+
         $this->attributes["description"] = $description;
     }
 
@@ -136,9 +150,11 @@ class Ticket extends AbstractModel
     public function setStatus(?string $status): void
     {
         $status = $status ?? self::OPEN;
+
         if (!in_array($status, self::STATUS)) {
-            throw new \InvalidArgumentException("O status é inválido");
+            throw new \InvalidArgumentException("O status é inválido.");
         }
+
         $this->attributes["status"] = $status;
     }
 
@@ -150,9 +166,11 @@ class Ticket extends AbstractModel
     public function setPriority(?string $priority): void
     {
         $priority = $priority ?? self::MEAN;
+
         if (!in_array($priority, self::PRIORITIES)) {
-            throw new \InvalidArgumentException("A prioridade não é válida.");
+            throw new \InvalidArgumentException("A prioridade é inválida.");
         }
+
         $this->attributes["priority"] = $priority;
     }
 
@@ -163,9 +181,7 @@ class Ticket extends AbstractModel
 
     public function setOpenedAt(): void
     {
-        $timezone = new \DateTimeZone(APP_TIMEZONE);
-        $now = new \DateTimeImmutable("now", $timezone);
-        $this->attributes["opened_at"] = $now->format("Y-m-d H:i:s");
+        $this->attributes["opened_at"] = (new \DateTimeImmutable("now", new \DateTimeZone(APP_TIMEZONE)))->format("Y-m-d H:i:s");
     }
 
     public function getOpenedAt(): ?string
@@ -175,9 +191,7 @@ class Ticket extends AbstractModel
 
     public function setClosedAt(): void
     {
-        $timezone = new \DateTimeZone(APP_TIMEZONE);
-        $now = new \DateTimeImmutable("now", $timezone);
-        $this->attributes["closed_at"] = $now->format("Y-m-d H:i:s");
+        $this->attributes["closed_at"] = (new \DateTimeImmutable("now", new \DateTimeZone(APP_TIMEZONE)))->format("Y-m-d H:i:s");
     }
 
     public function getClosedAt(): ?string

@@ -8,7 +8,9 @@ use InvalidArgumentException;
 class SchoolUser extends AbstractModel
 {
     protected string $table = "school_users";
+
     protected string $primaryKey = "id";
+
     protected array $fillable = [
         "school_id",
         "user_id",
@@ -24,6 +26,7 @@ class SchoolUser extends AbstractModel
     protected bool $timestamps = false;
 
     public const MORNING = "manha";
+
     public const AFTERNOON = "tarde";
 
     public const WHOLE = "integral";
@@ -62,6 +65,7 @@ class SchoolUser extends AbstractModel
     public function setShift(?string $shift): void
     {
         $shift = $shift ?? self::WHOLE;
+
         if (!in_array($shift, self::SHIFTS)) {
             throw new \InvalidArgumentException("O Turno é inválido.");
         }
@@ -102,20 +106,20 @@ class SchoolUser extends AbstractModel
         }
 
         $errors = [];
-        $shifts  = array_column($schools, "shift");
+        $shifts = array_column($schools, "shift");
 
-        if (in_array("integral", $shifts) && count($schools) > 1) {
+        if (in_array(self::WHOLE, self::SHIFTS) && count($schools) > 1) {
             $errors[] = "Um professor com turno integral não pode ser vinculado a outra escola em nenhum turno.";
         }
 
         $shiftCounts = array_count_values($shifts);
         foreach ($shiftCounts as $shift => $count) {
             if ($count > 1) {
-                $label    = match ($shift) {
-                    "manha"    => "Manhã",
-                    "tarde"    => "Tarde",
+                $label = match ($shift) {
+                    "manha" => "Manhã",
+                    "tarde" => "Tarde",
                     "integral" => "Integral",
-                    default    => $shift
+                    default => $shift
                 };
                 $errors[] = "O turno \"{$label}\" não pode ser usado em mais de uma escola.";
             }

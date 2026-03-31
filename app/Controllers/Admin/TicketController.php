@@ -16,7 +16,7 @@ class TicketController extends Controller
     {
         parent::__construct("App");
 
-        Auth::requireRole("tecnico");
+        Auth::requireRole(User::TECHNICIAN);
     }
 
     public function index(?array $data): void
@@ -25,9 +25,14 @@ class TicketController extends Controller
         $limit = 10;
 
         $ticketModel = new Ticket();
+
         $total = $ticketModel->count();
 
-        $paginator = new Paginator(url("/admin/chamados/"), "Página");
+        $paginator = new Paginator(
+            url("/admin/chamados/"),
+            "Página"
+        );
+
         $paginator->pager($total, $limit, $page);
 
         $tickets = $ticketModel->allOrdered(
@@ -45,8 +50,10 @@ class TicketController extends Controller
     public function create(?array $data): void
     {
         $schools = School::all();
+
         $categories = Category::all();
-        $teachers = (new User())->where("role", "!=", "tecnico")->get();
+
+        $teachers = User::teachers();
 
         echo $this->view->render('/admin/ticket/create', [
             "title" => "Cadastrar Novo Chamado | " . APP_NAME,
@@ -58,11 +65,7 @@ class TicketController extends Controller
 
     public function store(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/chamados/cadastrar");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/chamados/cadastrar");
 
         $ticket = new Ticket();
 
@@ -76,17 +79,15 @@ class TicketController extends Controller
 
         try {
 
-            $userId = Auth::user()->id;
-
             $ticket->fill([
                 "title" => $data["title"],
                 "description" => $data["description"],
                 "school_id" => $data["school_id"],
                 "category_id" => $data["category_id"],
-                "priority" => $data["priority"] ?? "media",
+                "priority" => $data["priority"] ?? Ticket::MEAN,
                 "opened_by" => $data["opened_by"],
-                "assigned_to" => $userId,
-                "status" => "aberto"
+                "assigned_to" => Auth::user()->id,
+                "status" => Ticket::OPEN
             ]);
 
             $ticket->save();
@@ -96,34 +97,31 @@ class TicketController extends Controller
             flash("error", $exception->getMessage());
             redirect("/admin/chamados/cadastrar");
             return;
+
         }
 
         flash("success", "Chamado criado com sucesso.");
         redirect("/admin/chamados/editar/" . $ticket->getId());
-        return;
+
     }
 
     public function edit(?array $data): void
     {
-        $id = $data['id'] ?? null;
-
-        if (!$id) {
-            redirect('/admin/chamados');
-            return;
-        }
-
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::find($data["id"]);
 
         if (!$ticket) {
-            flash('error', 'Ticket não encontrada');
+            flash('error', 'Chamado não encontrada');
             redirect('/admin/chamados');
             return;
         }
 
         $schools = School::all();
+
         $categories = Category::all();
-        $teachers = (new User())->where("role", "!=", "tecnico")->get();
-        $technicians = (new User())->where("role", "=", "tecnico")->get();
+
+        $teachers = User::teachers();
+
+        $technicians = User::technicians();
 
         echo $this->view->render('/admin/ticket/edit', [
             'title' => 'Editar Chamado | ' . APP_NAME,
@@ -137,17 +135,7 @@ class TicketController extends Controller
 
     public function update(?array $data): void
     {
-        if (!$data || !csrf_verify($data["_csrf"] ?? null)) {
-            flash("error", "Token de segurança inválido.");
-            redirect("/admin/chamados");
-            return;
-        }
-
-        if (empty($data["id"])) {
-            flash("error", "Chamado inválido.");
-            redirect("/admin/chamados");
-            return;
-        }
+        $this->validateCsrfToken($data, "/admin/chamados/editar/" . $data["id"]);
 
         $ticket = Ticket::find($data["id"]);
 
@@ -158,23 +146,27 @@ class TicketController extends Controller
         }
 
         if (empty($data["priority"]) || empty($data["status"])) {
-            flash("error", "Prioridade e Status são obrigatórios");
+            flash("error", "Os campos PRIORIDADE e STATUS são obrigatórios.");
             redirect("/admin/chamados/editar/" . $data["id"]);
             return;
         }
 
         try {
+
             $ticket->fill([
                 "priority" => $data["priority"],
                 "status" => $data["status"],
-                "assigned_to" => !empty($data["assigned_to"]) ? (int) $data["assigned_to"] : null
+                "assigned_to" => !empty($data["assigned_to"]) ? (int)$data["assigned_to"] : null
             ]);
+
             $ticket->save();
 
         } catch (\InvalidArgumentException $exception) {
+
             flash("error", $exception->getMessage());
             redirect("/admin/chamados/editar/" . $data["id"]);
             return;
+
         }
 
         flash("success", "Chamado atualizado com sucesso.");
@@ -184,12 +176,11 @@ class TicketController extends Controller
     public function open(?array $data): void
     {
         $page = $data["page"] ?? 1;
-
         $limit = 10;
 
         $ticketModel = new Ticket();
 
-        $totalTicketsOpen = $ticketModel->getTicketsByStatus("aberto");
+        $totalTicketsOpen = $ticketModel->getTicketsByStatus(Ticket::OPEN);
 
         $paginator = new Paginator(
             url("/admin/chamados/abertos/"),
@@ -205,7 +196,7 @@ class TicketController extends Controller
             ->get();
 
         echo $this->view->render('/admin/ticket/open', [
-            "title" => "Chamados Cadastrados | " . APP_NAME,
+            "title" => "Chamados Abertos | " . APP_NAME,
             "tickets" => $tickets,
             "paginator" => $paginator
         ]);

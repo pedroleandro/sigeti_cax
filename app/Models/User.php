@@ -167,4 +167,14 @@ class User extends AbstractModel
     {
         return count($this->schools()) > 1;
     }
+
+    public static function teachers(): ?array
+    {
+        return (new static)->where("role", "=", self::TEACHER)->get();
+    }
+
+    public static function technicians(): ?array
+    {
+        return (new static)->where("role", "=", self::TECHNICIAN)->get();
+    }
 }
