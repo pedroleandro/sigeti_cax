@@ -108,7 +108,7 @@ class SchoolUser extends AbstractModel
         $errors = [];
         $shifts = array_column($schools, "shift");
 
-        if (in_array(self::WHOLE, self::SHIFTS) && count($schools) > 1) {
+        if (in_array(self::WHOLE, ["manha", "tarde"]) && count($schools) > 1) {
             $errors[] = "Um professor com turno integral não pode ser vinculado a outra escola em nenhum turno.";
         }
 
