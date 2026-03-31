@@ -7,6 +7,7 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Models\Category;
 use App\Models\Ticket;
+use App\Models\User;
 use CoffeeCode\Paginator\Paginator;
 
 class DashboardController extends Controller
@@ -15,7 +16,7 @@ class DashboardController extends Controller
     {
         parent::__construct("App");
 
-        Auth::requireRole("tecnico");
+        Auth::requireRole(User::TECHNICIAN);
     }
 
     public function dashboard(?array $data): void
@@ -27,12 +28,12 @@ class DashboardController extends Controller
         $statusCounts = (new Ticket())->countGroupBy('status');
 
         $counts = [
-            'aberto' => 0,
-            'em_andamento' => 0,
-            'aguardando' => 0,
-            'resolvido' => 0,
-            'finalizado' => 0,
-            'arquivado' => 0,
+            Ticket::OPEN => 0,
+            Ticket::IN_PROGRESS => 0,
+            Ticket::WAITING => 0,
+            Ticket::RESOLVED => 0,
+            Ticket::FINISHED => 0,
+            Ticket::ARCHIVED => 0,
         ];
 
         foreach ($statusCounts as $row) {
@@ -42,11 +43,14 @@ class DashboardController extends Controller
         }
 
         $ticketModel = new Ticket();
-        $total = $ticketModel
-            ->whereIn('status', ['aberto', 'em_andamento', 'aguardando'])
-            ->count();
 
-        $paginator = new Paginator(url("/admin/dashboard/"), "Página");
+        $total = $ticketModel->count();
+
+        $paginator = new Paginator(
+            url("/admin/dashboard/"),
+            "Página"
+        );
+
         $paginator->pager($total, $limit, $page);
 
         $tickets = (new Ticket())->allOrdered(
@@ -65,8 +69,8 @@ class DashboardController extends Controller
 
         $categories = Category::all();
 
-        $categoryData   = (new Ticket())->countByCategory($year);
-        $categoryNames  = array_column($categoryData, 'category');
+        $categoryData = (new Ticket())->countByCategory($year);
+        $categoryNames = array_column($categoryData, 'category');
         $categoryTotals = array_column($categoryData, 'total');
 
         echo $this->view->render("admin/dashboard", [
@@ -77,7 +81,7 @@ class DashboardController extends Controller
             "year" => $year,
             "monthlyData" => $monthlyData,
             "categories" => $categories,
-            "categoryNames"  => $categoryNames,
+            "categoryNames" => $categoryNames,
             "categoryTotals" => $categoryTotals,
         ]);
     }
