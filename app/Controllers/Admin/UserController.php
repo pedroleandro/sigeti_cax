@@ -192,7 +192,9 @@ class UserController extends Controller
 
             $user->save();
 
-            if ($user->getRole() === User::TEACHER) {
+            $this->removeAllSchoolLinks($user->getId());
+
+            if ($role === User::TEACHER) {
                 $this->syncSchoolLinks($user->getId(), $data["schools"] ?? []);
             } else {
                 $this->removeAllSchoolLinks($user->getId());
