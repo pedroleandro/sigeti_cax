@@ -6,6 +6,7 @@ use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Models\Ticket;
+use App\Models\User;
 use CoffeeCode\Paginator\Paginator;
 
 class DashboardController extends Controller
@@ -14,7 +15,7 @@ class DashboardController extends Controller
     {
         parent::__construct("App");
 
-        Auth::requireRole("professor");
+        Auth::requireRole(User::TEACHER);
     }
 
     public function dashboard(?array $data): void
@@ -28,12 +29,12 @@ class DashboardController extends Controller
             ->countGroupBy('status');
 
         $counts = [
-            'aberto' => 0,
-            'em_andamento' => 0,
-            'aguardando' => 0,
-            'resolvido' => 0,
-            'finalizado' => 0,
-            'arquivado' => 0,
+            Ticket::OPEN => 0,
+            Ticket::IN_PROGRESS => 0,
+            Ticket::WAITING => 0,
+            Ticket::RESOLVED => 0,
+            Ticket::FINISHED => 0,
+            Ticket::ARCHIVED => 0,
         ];
 
         foreach ($statusCounts as $row) {
