@@ -85,10 +85,25 @@ class School extends AbstractModel
         return (new static())->where("code", "=", $code)->first();
     }
 
-    public function users(): array
+    public function teachers(): array
     {
-        return (new SchoolUser())
+        $schoolUsers = (new SchoolUser())
             ->where("school_id", "=", $this->getId())
+            ->get();
+
+        $userIds = [];
+
+        foreach ($schoolUsers as $schoolUser) {
+            $userIds[] = $schoolUser->getUserId();
+        }
+
+        if (empty($userIds)) {
+            return [];
+        }
+
+        return (new User())
+            ->whereIn("id", $userIds)
+            ->where("role", "=", User::TEACHER)
             ->get();
     }
 }
