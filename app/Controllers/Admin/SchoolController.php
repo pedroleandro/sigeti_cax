@@ -57,23 +57,26 @@ class SchoolController extends Controller
     {
         $this->validateCsrfToken($data, "/admin/escolas/cadastrar");
 
-        $school = new School();
-
-        $errors = $school->validate($data);
-
-        if ($errors) {
-            flash("error", implode("<br>", $errors));
-            redirect("/admin/escolas/cadastrar");
-            return;
-        }
-
         try {
+
+            $school = new School();
 
             $school->fill([
                 "name" => $data["name"],
                 "code" => $data["code"],
                 "address" => $data["address"]
             ]);
+
+            $errors = array_merge(
+                $school->validate($data),
+                $school->validateBusinessRules()
+            );
+
+            if ($errors) {
+                flash("error", implode("<br>", $errors));
+                redirect("/admin/escolas/cadastrar");
+                return;
+            }
 
             $school->save();
 
@@ -117,14 +120,6 @@ class SchoolController extends Controller
             return;
         }
 
-        $errors = $school->validate($data);
-
-        if ($errors) {
-            flash("error", implode("<br>", $errors));
-            redirect("/admin/escolas/editar/" . $school->getId());
-            return;
-        }
-
         try {
 
             $school->fill([
@@ -132,6 +127,17 @@ class SchoolController extends Controller
                 "code" => $data["code"],
                 "address" => $data["address"]
             ]);
+
+            $errors = array_merge(
+                $school->validate($data),
+                $school->validateBusinessRules($school->getId())
+            );
+
+            if ($errors) {
+                flash("error", implode("<br>", $errors));
+                redirect("/admin/escolas/editar/" . $school->getId());
+                return;
+            }
 
             $school->save();
 

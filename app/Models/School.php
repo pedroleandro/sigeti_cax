@@ -85,6 +85,52 @@ class School extends AbstractModel
         return (new static())->where("code", "=", $code)->first();
     }
 
+    public function findByName(string $name): ?self
+    {
+        return (new static())
+            ->where("name", "=", $name)
+            ->first();
+    }
+
+    public function existsByName(string $name, ?int $ignoreId = null): bool
+    {
+        $query = (new static())
+            ->where("name", "=", $name);
+
+        if ($ignoreId) {
+            $query->where("id", "!=", $ignoreId);
+        }
+
+        return $query->first() !== null;
+    }
+
+    public function existsByCode(string $code, ?int $ignoreId = null): bool
+    {
+        $query = (new static())
+            ->where("code", "=", $code);
+
+        if ($ignoreId) {
+            $query->where("id", "!=", $ignoreId);
+        }
+
+        return $query->first() !== null;
+    }
+
+    public function validateBusinessRules(?int $ignoreId = null): array
+    {
+        $errors = [];
+
+        if ($this->existsByName($this->getName(), $ignoreId)) {
+            $errors[] = "Já existe uma escola com esse nome.";
+        }
+
+        if ($this->existsByCode($this->getCode(), $ignoreId)) {
+            $errors[] = "Já existe uma escola com esse código.";
+        }
+
+        return $errors;
+    }
+
     public function teachers(): array
     {
         $schoolUsers = (new SchoolUser())
