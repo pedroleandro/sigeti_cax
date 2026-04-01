@@ -26,6 +26,8 @@ class User extends AbstractModel
 
     protected bool $timestamps = true;
 
+    protected bool $softDelete = true;
+
     public const TEACHER = "professor";
     public const TECHNICIAN = "tecnico";
 

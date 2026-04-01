@@ -37,6 +37,8 @@ class Ticket extends AbstractModel
 
     protected bool $timestamps = true;
 
+    protected bool $softDelete = true;
+
     public const OPEN = "aberto";
 
     public const IN_PROGRESS = "em_andamento";
@@ -235,7 +237,8 @@ class Ticket extends AbstractModel
     public function allOrdered(int $limit, int $offset): array
     {
         $sql = "SELECT * FROM {$this->table}
-            ORDER BY 
+         WHERE deleted_at IS NULL   
+         ORDER BY 
                 FIELD(status, 'aberto', 'em_andamento', 'aguardando', 'resolvido', 'finalizado', 'arquivado'),
                 FIELD(priority, 'alta', 'media', 'baixa'),
                 opened_at ASC
@@ -253,7 +256,7 @@ class Ticket extends AbstractModel
     public function allOrderedByUser(int $userId, int $limit, int $offset): array
     {
         $sql = "SELECT * FROM {$this->table}
-            WHERE opened_by = :user_id
+            WHERE opened_by = :user_id AND deleted_at IS NULL
             ORDER BY
                 FIELD(status, 'aberto', 'em_andamento', 'aguardando', 'resolvido', 'finalizado', 'arquivado'),
                 FIELD(priority, 'alta', 'media', 'baixa'),

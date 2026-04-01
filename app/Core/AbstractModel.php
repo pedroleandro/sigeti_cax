@@ -18,6 +18,8 @@ abstract class AbstractModel
 
     protected bool $timestamps = true;
 
+    protected bool $softDelete = true;
+
     protected array $attributes = [];
 
     protected array $wheres = [];
@@ -164,6 +166,21 @@ abstract class AbstractModel
             return false;
         }
 
+        if ($this->softDelete) {
+            $sql = sprintf(
+                "UPDATE %s SET deleted_at = :deleted_at WHERE %s = :id",
+                $this->table,
+                $this->primaryKey
+            );
+
+            $statement = $this->connection->prepare($sql);
+
+            return $statement->execute([
+                'deleted_at' => $this->now(),
+                'id' => $this->attributes[$this->primaryKey]
+            ]);
+        }
+
         $sql = sprintf(
             "DELETE FROM %s WHERE %s = :id",
             $this->table,
@@ -172,15 +189,9 @@ abstract class AbstractModel
 
         $statement = $this->connection->prepare($sql);
 
-        $success = $statement->execute([
+        return $statement->execute([
             'id' => $this->attributes[$this->primaryKey]
         ]);
-
-        if ($success) {
-            $this->exists = false;
-        }
-
-        return $success;
     }
 
     public static function find(int $id): ?static
@@ -188,10 +199,14 @@ abstract class AbstractModel
         $instance = new static();
 
         $sql = sprintf(
-            "SELECT * FROM %s WHERE %s = :id LIMIT 1",
+            "SELECT * FROM %s WHERE %s = :id",
             $instance->table,
             $instance->primaryKey
         );
+
+        $instance->applySoftDeleteFilter($sql);
+
+        $sql .= " LIMIT 1";
 
         $statement = $instance->connection->prepare($sql);
         $statement->execute(['id' => $id]);
@@ -208,6 +223,8 @@ abstract class AbstractModel
         $instance = new static();
 
         $sql = "SELECT * FROM {$instance->table}";
+
+        $instance->applySoftDeleteFilter($sql);
 
         $statement = $instance->connection->query($sql);
 
@@ -235,25 +252,70 @@ abstract class AbstractModel
     public function whereIn(string $column, array $values): self
     {
         $placeholders = [];
+
         foreach ($values as $i => $value) {
             $param = $column . '_in_' . $i;
             $placeholders[] = ':' . $param;
             $this->params[$param] = $value;
         }
+
         $this->wheres[] = "{$column} IN (" . implode(', ', $placeholders) . ")";
+
         return $this;
     }
 
     public function countGroupBy(string $column): array
     {
         $sql = "SELECT {$column}, COUNT(*) as total FROM {$this->table}";
+
         if (!empty($this->wheres)) {
             $sql .= " WHERE " . implode(' AND ', $this->wheres);
         }
+
+        $this->applySoftDeleteFilter($sql);
+
         $sql .= " GROUP BY {$column}";
+
+        $statement = $this->connection->prepare($sql);
+
+        $statement->execute($this->params);
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function get(): array
+    {
+        $sql = "SELECT * FROM {$this->table}";
+
+        if (!empty($this->wheres)) {
+            $sql .= " WHERE " . implode(' AND ', $this->wheres);
+        }
+
+        $this->applySoftDeleteFilter($sql);
+
+        if ($this->orderByColumn) {
+            $sql .= " ORDER BY {$this->orderByColumn} {$this->orderDirection}";
+        }
+
+        if ($this->limitValue !== null) {
+            $sql .= " LIMIT {$this->limitValue}";
+        }
+
+        if ($this->offsetValue !== null) {
+            $sql .= " OFFSET {$this->offsetValue}";
+        }
+
         $statement = $this->connection->prepare($sql);
         $statement->execute($this->params);
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $models = [];
+        foreach ($rows as $row) {
+            $models[] = static::hydrate($row);
+        }
+
+        return $models;
     }
 
     public function first(): ?static
@@ -266,11 +328,15 @@ abstract class AbstractModel
             $sql .= " WHERE " . implode(' AND ', $this->wheres);
         }
 
+        $this->applySoftDeleteFilter($sql);
+
         if ($this->orderByColumn) {
             $sql .= " ORDER BY {$this->orderByColumn} {$this->orderDirection}";
         }
 
-        $sql .= " LIMIT 1";
+        if ($this->limitValue !== null) {
+            $sql .= " LIMIT {$this->limitValue}";
+        }
 
         $statement = $this->connection->prepare($sql);
         $statement->execute($this->params);
@@ -302,39 +368,6 @@ abstract class AbstractModel
         return $this;
     }
 
-    public function get(): array
-    {
-        $sql = "SELECT * FROM {$this->table}";
-
-        if (!empty($this->wheres)) {
-            $sql .= " WHERE " . implode(' AND ', $this->wheres);
-        }
-
-        if ($this->orderByColumn) {
-            $sql .= " ORDER BY {$this->orderByColumn} {$this->orderDirection}";
-        }
-
-        if ($this->limitValue !== null) {
-            $sql .= " LIMIT {$this->limitValue}";
-        }
-
-        if ($this->offsetValue !== null) {
-            $sql .= " OFFSET {$this->offsetValue}";
-        }
-
-        $statement = $this->connection->prepare($sql);
-        $statement->execute($this->params);
-
-        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $models = [];
-        foreach ($rows as $row) {
-            $models[] = static::hydrate($row);
-        }
-
-        return $models;
-    }
-
     public function getAttributes(): array
     {
         return $this->attributes;
@@ -347,6 +380,8 @@ abstract class AbstractModel
         if (!empty($this->wheres)) {
             $sql .= " WHERE " . implode(' AND ', $this->wheres);
         }
+
+        $this->applySoftDeleteFilter($sql);
 
         $statement = $this->connection->prepare($sql);
         $statement->execute($this->params);
@@ -369,5 +404,18 @@ abstract class AbstractModel
         $now = new DateTimeImmutable('now', $timezone);
 
         return $now->format('Y-m-d H:i:s');
+    }
+
+    protected function applySoftDeleteFilter(string &$sql): void
+    {
+        if (!$this->softDelete) {
+            return;
+        }
+
+        if (stripos($sql, 'WHERE') === false) {
+            $sql .= " WHERE deleted_at IS NULL";
+        } else {
+            $sql .= " AND deleted_at IS NULL";
+        }
     }
 }

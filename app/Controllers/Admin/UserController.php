@@ -240,6 +240,7 @@ class UserController extends Controller
             ->where("user_id", "=", $userId)
             ->get();
 
+        /** @var SchoolUser $link */
         foreach ($links as $link) {
             $link->delete();
         }
